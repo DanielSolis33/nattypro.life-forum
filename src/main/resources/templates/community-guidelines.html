@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Community Guidelines - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --blue: #0070f3;
+            --blue-light: #e8f1ff;
+            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500);
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,112,243,0.3);
+        }
+        header h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 7px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.25); }
+        .container {
+            max-width: 780px;
+            margin: 40px auto;
+            padding: 0 20px 60px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .card-banner {
+            height: 6px;
+            background: linear-gradient(90deg, var(--blue), #004bb5);
+        }
+        .card-body { padding: 40px; }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin: 0 0 8px;
+        }
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+        .mission-box {
+            background: #1a1a2e;
+            color: white;
+            border-radius: 10px;
+            padding: 28px;
+            margin-bottom: 32px;
+        }
+        .mission-box h2 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255,255,255,0.6);
+            border: none;
+            padding: 0;
+        }
+        .mission-box p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.9);
+        }
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 32px 0 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+        }
+        .value-label {
+            display: inline-block;
+            background: var(--blue-light);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #374151;
+            margin: 0 0 14px;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 0 0 14px;
+        }
+        ul li {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .value-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 22px;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--blue);
+        }
+        .value-card h3 {
+            margin: 0 0 8px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .value-card p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .enforcement-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .enforcement-item {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 14px;
+        }
+        .enforcement-item strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        .enforcement-item span { color: var(--text-muted); }
+        .highlight-box {
+            background: var(--blue-light);
+            border-left: 4px solid var(--blue);
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        @media (max-width: 600px) {
+            .card-body { padding: 24px; }
+            .page-title { font-size: 1.4rem; }
+            .enforcement-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>NattyPro.Life</h1>
+    <a href="/" class="back-btn">← Back to Forum</a>
+</header>
+
+<div class="container">
+    <div class="card">
+        <div class="card-banner"></div>
+        <div class="card-body">
+
+            <h1 class="page-title">Community Guidelines</h1>
+            <p class="last-updated">Last updated: April 2026</p>
+
+            <!-- Mission -->
+            <div class="mission-box">
+                <h2>Our Mission</h2>
+                <p>Welcome to NattyPro.Life — the community built for serious natural bodybuilders. Our mission is to provide a trusted, drug-free space where athletes of all levels can share knowledge, find support, celebrate achievements, and grow together. These guidelines exist not to restrict you, but to protect the integrity and quality of everything we're building here together.</p>
+            </div>
+
+            <p>NattyPro.Life is a values-based community. Our guidelines aren't just a list of rules — they reflect what we stand for. When you understand our values, the guidelines make themselves.</p>
+
+            <!-- Values -->
+            <h2>Our Core Values</h2>
+
+            <div class="value-card">
+                <span class="value-label">Value 1</span>
+                <h3>💪 We value the natural path</h3>
+                <p>This community exists to celebrate and support drug-free bodybuilding. Content that promotes, glorifies, or provides guidance on the use of performance-enhancing drugs (PEDs) has no place here. We respect the hard work it takes to build a natural physique and protect that culture fiercely.</p>
+            </div>
+
+            <div class="value-card">
+                <span class="value-label">Value 2</span>
+                <h3>🤝 We value respect above all</h3>
+                <p>Debate is welcome — bodybuilding culture thrives on it. But there's a line between healthy debate and personal attacks. Disagree with ideas, not people. Harassment, bullying, hate speech, and targeted attacks will not be tolerated, regardless of who the target is.</p>
+            </div>
+
+            <div class="value-card">
+                <span class="value-label">Value 3</span>
+                <h3>🧠 We value quality knowledge</h3>
+                <p>This forum should be a place people come to learn. Share what you know, cite your sources where possible, and be honest about your experience level. Spreading misinformation — especially on topics like training, nutrition, and health — undermines what this community is for.</p>
+            </div>
+
+            <div class="value-card">
+                <span class="value-label">Value 4</span>
+                <h3>🔒 We value privacy and trust</h3>
+                <p>What members share here should stay here. Do not share, screenshot, or redistribute another member's personal information, images, or private messages without their explicit consent. Doxxing will result in immediate account termination.</p>
+            </div>
+
+            <div class="value-card">
+                <span class="value-label">Value 5</span>
+                <h3>🌱 We value authentic community</h3>
+                <p>This is not an advertising platform. Unsolicited promotion of products, services, coaching packages, or brands — whether direct or subtle — is not permitted without explicit admin approval. The Self Promotion category exists for members to share their legitimate content, within reason.</p>
+            </div>
+
+            <!-- Specific Guidelines -->
+            <h2>Specific Guidelines</h2>
+
+            <p><strong>Posts and comments should be:</strong></p>
+            <ul>
+                <li>Relevant to the category they're posted in</li>
+                <li>Written in good faith — to contribute, not to provoke</li>
+                <li>Free from profanity used aggressively or directed at others</li>
+                <li>Original or properly attributed if quoting external sources</li>
+            </ul>
+
+            <p><strong>The following are strictly prohibited:</strong></p>
+            <ul>
+                <li>Harassment, threats, or targeted attacks on any member</li>
+                <li>Hate speech based on race, gender, religion, sexuality, nationality, or any other characteristic</li>
+                <li>Sexual or explicit content of any kind</li>
+                <li>Content involving or targeting minors</li>
+                <li>Spam — including repetitive posts, chain messages, or flooding threads</li>
+                <li>Posting malicious links, phishing attempts, or malware</li>
+                <li>Impersonating other members, coaches, or public figures</li>
+                <li>Sharing another person's private information without consent</li>
+                <li>Content promoting illegal activity</li>
+                <li>PED promotion, sourcing, or detailed usage guidance</li>
+            </ul>
+
+            <!-- Chat-Specific -->
+            <h2>Chat Room Guidelines</h2>
+            <div class="highlight-box">
+                The NattyPro.Life live chat rooms are invite-only spaces. Access is granted by the admin team. The same community values apply — with the addition of these chat-specific rules:
+            </div>
+            <ul>
+                <li>No spamming — sending repeated messages rapidly will result in an automatic mute</li>
+                <li>No sharing of external links or images in chat</li>
+                <li>No direct or indirect marketing of any kind</li>
+                <li>Keep conversations relevant to the room's topic</li>
+                <li>Repeated violations will result in permanent removal from chat</li>
+            </ul>
+
+            <!-- Enforcement -->
+            <h2>How We Enforce These Guidelines</h2>
+            <p>We believe in fair, consistent, and transparent moderation. Here's how violations are handled:</p>
+
+            <div class="enforcement-grid">
+                <div class="enforcement-item">
+                    <strong>⚠️ Warning</strong>
+                    <span>First-time minor violations. Content may be removed and member notified.</span>
+                </div>
+                <div class="enforcement-item">
+                    <strong>🔇 Temporary Mute</strong>
+                    <span>Chat spam or repeated minor violations. 30-minute chat restriction.</span>
+                </div>
+                <div class="enforcement-item">
+                    <strong>⏸️ Account Suspension</strong>
+                    <span>Serious or repeated violations. Temporary loss of posting privileges.</span>
+                </div>
+                <div class="enforcement-item">
+                    <strong>🚫 Permanent Ban</strong>
+                    <span>Severe violations or repeated offenses. Immediate account termination.</span>
+                </div>
+            </div>
+
+            <p style="margin-top: 20px;">Severe violations — including illegal content, exploitation of minors, or doxxing — result in immediate permanent termination and may be reported to relevant authorities.</p>
+
+            <!-- Reporting -->
+            <h2>Reporting Violations</h2>
+            <p>See something that doesn't belong here? Help us keep NattyPro.Life clean. Use the Contact form on the homepage to report violations, selecting "Report a User" as the subject. Include as much detail as possible — username, post link, and a description of the issue.</p>
+            <p>We take every report seriously and review all submissions as quickly as possible.</p>
+
+            <!-- Closing -->
+            <h2>A Note from the Founder</h2>
+            <p>NattyPro.Life was built because natural bodybuilding deserves its own space — one that isn't drowned out by enhanced culture, influencer noise, or low-quality content. These guidelines are how we protect that vision. They'll evolve as the community grows, but the values behind them won't.</p>
+            <p>Thank you for being part of this. Train hard, stay natural, and help us build something worth being proud of. 💪</p>
+            <p style="color: var(--text-muted); font-size: 14px;">— Daniel Solis, Founder of NattyPro.Life</p>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Age Verification - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --blue: #0070f3;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 480px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            text-align: center;
+        }
+        .icon { font-size: 48px; margin-bottom: 16px; }
+        h2 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-yes { background: var(--blue); color: white; }
+        .btn-yes:hover { background: #005ed4; }
+        .btn-no { background: #f3f4f6; color: var(--text-muted); }
+        .btn-no:hover { background: #e5e7eb; }
+    </style>
+</head>
+<body>
+    <header>NattyPro.Life</header>
+    <div class="container">
+        <div class="card">
+            <div class="icon">🔞</div>
+            <h2>Age Verification</h2>
+            <p>NattyPro.Life is a community for individuals aged <strong>15 and older</strong>. Please confirm your age to continue.</p>
+            <form action="/register/age" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="btn-group">
+                    <button type="submit" name="ageConfirm" value="yes" class="btn btn-yes">Yes, I am 15 or older</button>
+                    <button type="submit" name="ageConfirm" value="no" class="btn btn-no">No, I am under 15</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

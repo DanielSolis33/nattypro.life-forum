@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Muted - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: #f4f6fb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #0070f3;
+            color: white;
+            padding: 14px 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 440px;
+            margin: 80px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 40px;
+        }
+        .icon { font-size: 48px; margin-bottom: 16px; }
+        h2 { margin: 0 0 12px; font-size: 1.4rem; }
+        p { color: #6b7280; line-height: 1.6; margin-bottom: 8px; font-size: 14px; }
+        .mute-time {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 15px;
+            margin: 16px 0 24px;
+        }
+        .btn {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #e5e7eb; }
+    </style>
+</head>
+<body>
+    <header>NattyPro.Life</header>
+    <div class="container">
+        <div class="card">
+            <div class="icon">🔇</div>
+            <h2>You're Currently Muted</h2>
+            <p>You have been temporarily muted for violating the chat spam policy.</p>
+            <div class="mute-time">
+                Mute expires: <span th:text="${mutedUntil}">date</span>
+            </div>
+            <p>Please review the community guidelines before returning to chat.</p>
+            <a href="/" class="btn">← Back to Forum</a>
+        </div>
+    </div>
+</body>
+</html>

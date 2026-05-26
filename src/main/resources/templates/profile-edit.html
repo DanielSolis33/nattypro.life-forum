@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Profile - NattyPro.Life</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+
+		header {
+		    background: #0070f3;
+		    color: white;
+		    padding: 14px 24px;
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    box-shadow: 0 2px 8px rgba(0,112,243,0.3);
+		    position: sticky;
+		    top: 0;
+		    z-index: 100;
+		}
+        header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .back-btn {
+            background: white;
+            color: #007bff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .edit-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .edit-card h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        .checkbox-group {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .checkbox-group h3 {
+            margin: 0 0 15px 0;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .checkbox-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .button-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            min-height: 44px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            padding: 12px 30px;
+            border-radius: 5px;
+            color: white;
+            min-height: 44px;
+            line-height: 20px;
+        }
+
+        .cancel-btn:hover {
+            background: #5a6268;
+        }
+
+        .danger-btn {
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-height: unset;
+        }
+
+        .danger-btn:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 15px auto;
+                padding: 0 10px;
+            }
+
+            .edit-card {
+                padding: 20px 15px;
+            }
+
+            .edit-card h2 {
+                font-size: 1.3em;
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="number"],
+            .form-group textarea {
+                font-size: 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            header h1 {
+                font-size: 1.2em;
+            }
+
+            .back-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NattyPro.Life Forum</h1>
+        <a th:href="@{/profile/{username}(username=${user.username})}" class="back-btn">Back to Profile</a>
+    </header>
+
+    <div class="container">
+        <div class="edit-card">
+            <h2>Edit Your Profile</h2>
+
+            <!-- MAIN FORM -->
+            <form th:action="@{/profile/update}" method="post" enctype="multipart/form-data">
+
+                <!-- Avatar Upload -->
+                <div class="form-group">
+                    <label for="avatarFile">Profile Picture</label>
+                    <input type="file" id="avatarFile" name="avatarFile" accept="image/*">
+                    <small>Upload a profile picture (JPG, PNG, GIF, or WebP). Recommended: 500x500 to 1000x1000 pixels.</small>
+                </div>
+
+                <!-- Bio -->
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" th:text="${user.bio}" placeholder="Tell us about yourself..." maxlength="500"></textarea>
+                    <small>Max 500 characters. Share your fitness journey, goals, or anything you'd like!</small>
+                </div>
+
+                <!-- Age -->
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" th:value="${user.age}" min="13" max="120" placeholder="Your age">
+                    <small>Must be between 13-120</small>
+                </div>
+
+                <!-- Social Handles -->
+                <div class="form-group">
+                    <label for="instagramHandle">Instagram Handle</label>
+                    <input type="text" id="instagramHandle" name="instagramHandle" th:value="${user.instagramHandle}" placeholder="yourhandle">
+                    <small>Enter without @ symbol</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="twitterHandle">Twitter Handle</label>
+                    <input type="text" id="twitterHandle" name="twitterHandle" th:value="${user.twitterHandle}" placeholder="yourhandle">
+                    <small>Enter without @ symbol</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="youtubeHandle">YouTube Handle</label>
+                    <input type="text" id="youtubeHandle" name="youtubeHandle" th:value="${user.youtubeHandle}" placeholder="yourhandle">
+                    <small>Enter without @ symbol (e.g., yourchannel)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="twitchHandle">Twitch Handle</label>
+                    <input type="text" id="twitchHandle" name="twitchHandle" th:value="${user.twitchHandle}" placeholder="yourhandle">
+                    <small>Enter without @ symbol</small>
+                </div>
+
+                <!-- Privacy Settings -->
+                <div class="checkbox-group">
+                    <h3>Privacy Settings</h3>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showEmail" name="showEmail" th:checked="${user.showEmail}">
+                        <label for="showEmail">Show my email address on my profile</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showAge" name="showAge" th:checked="${user.showAge}">
+                        <label for="showAge">Show my age on my profile</label>
+                    </div>
+                </div>
+
+                <!-- Save / Cancel -->
+                <div class="button-group">
+                    <button type="submit">Save Changes</button>
+                    <a th:href="@{/profile/{username}(username=${user.username})}" class="cancel-btn">Cancel</a>
+                </div>
+
+            </form>
+            <!-- END MAIN FORM -->
+
+            <!-- Remove Avatar (separate form, OUTSIDE main form) -->
+            <div style="margin-top: 20px;"
+                 th:if="${user.avatarUrl != null && user.avatarUrl != '/images/default-avatar.png'}">
+                <form th:action="@{/profile/removeAvatar}" method="post" style="display: inline;">
+                    <button type="submit" class="danger-btn"
+                            onclick="return confirm('Remove your profile picture?');">
+                        Remove Profile Picture
+                    </button>
+                </form>
+            </div>
+
+        </div>
+        <!-- ── Change Password ── -->
+            <div style="margin-top: 32px; border-top: 2px solid #f0f0f0; padding-top: 24px;">
+                <h2 style="color:#333; margin-top:0;">Change Password</h2>
+
+                <div th:if="${param.passwordChanged}"
+                     style="background:#dcfce7;color:#166534;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                    ✅ Password updated successfully.
+                </div>
+                <div th:if="${param.passwordError == 'wrongCurrent'}"
+                     style="background:#fee2e2;color:#dc2626;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                    ❌ Current password is incorrect.
+                </div>
+                <div th:if="${param.passwordError == 'mismatch'}"
+                     style="background:#fee2e2;color:#dc2626;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                    ❌ New passwords do not match.
+                </div>
+                <div th:if="${param.passwordError == 'tooShort'}"
+                     style="background:#fee2e2;color:#dc2626;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                    ❌ Password must be at least 8 characters.
+                </div>
+
+                <form th:action="@{/profile/change-password}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" name="currentPassword" required placeholder="Enter current password"/>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="newPassword" required placeholder="At least 8 characters"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" name="confirmPassword" required placeholder="Repeat new password"/>
+                    </div>
+                    <button type="submit">Update Password</button>
+                </form>
+            </div>
+
+            <!-- ── Delete Account ── -->
+            <div style="margin-top: 32px; border-top: 2px solid #fee2e2; padding-top: 24px;">
+                <h2 style="color:#dc2626; margin-top:0;">Delete Account</h2>
+                <p style="color:#6b7280; font-size:14px;">
+                    Your posts and contributions will remain but your username, email, and password will be permanently removed.
+                    You will not be able to recover this account. To confirm, type your username below.
+                </p>
+
+                <div th:if="${param.deleteError}"
+                     style="background:#fee2e2;color:#dc2626;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
+                    ❌ Username did not match. Account not deleted.
+                </div>
+
+                <form th:action="@{/profile/delete}" method="post"
+                      onsubmit="return confirm('Are you absolutely sure? This cannot be undone.');">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="form-group">
+                        <label>Type your username to confirm</label>
+                        <input type="text" name="confirmUsername" required
+                               placeholder="Your exact username"/>
+                    </div>
+                    <button type="submit" class="danger-btn"
+                            style="padding:12px 24px; font-size:15px;">
+                        Permanently Delete Account
+                    </button>
+                </form>
+            </div>
+        
+    </div>
+</body>
+</html>

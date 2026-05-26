@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register - My Forum</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 100px auto; padding: 20px; }
+        .form-container { background: #f9f9f9; padding: 30px; border-radius: 5px; border: 1px solid #ccc; }
+        h1 { text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button { width: 100%; background: #007bff; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; text-align: center; }
+        .login-link { text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Register</h1>
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+        <form th:action="@{/register}" method="post">
+            <input type="text" name="username" placeholder="Username" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <div style="position: relative;">
+<div style="position: relative;">
+    <input type="password" id="password" name="password" placeholder="Password" required
+           style="width:100%; padding-right: 44px;"/>
+    <button type="button" onclick="togglePassword()"
+            style='position:absolute; right:0; top:0; height:100%; width:44px;
+                   background:none; border:none; cursor:pointer; color:#6b7280; font-size:16px;'>
+        👁
+    </button>
+</div>
+<button type="submit">Register</button>
+            </form>
+        <div class="login-link">
+            Already have an account? <a href="/login">Login here</a>
+        </div>
+    </div>
+    <script>
+function togglePassword() {
+    const pwd = document.getElementById('password');
+    pwd.type = pwd.type === 'password' ? 'text' : 'password';
+}
+</script>
+    
+</body>
+</html>

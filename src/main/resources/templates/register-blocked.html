@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Access Restricted - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: #f4f6fb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #0070f3;
+            color: white;
+            padding: 14px 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 480px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 40px;
+        }
+        .icon { font-size: 48px; margin-bottom: 16px; }
+        h2 { margin: 0 0 12px; font-size: 1.4rem; }
+        p { color: #6b7280; line-height: 1.6; margin-bottom: 24px; }
+        a {
+            color: #0070f3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>NattyPro.Life</header>
+    <div class="container">
+        <div class="card">
+            <div class="icon">🚫</div>
+            <h2>Access Restricted</h2>
+            <p>Sorry, NattyPro.Life is only available to users aged 15 and older. We hope to see you when you're older!</p>
+            <a href="/register">← Back to Registration</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Privacy Policy - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --blue: #0070f3;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,112,243,0.3);
+        }
+        header h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 7px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.25); }
+        .container {
+            max-width: 780px;
+            margin: 40px auto;
+            padding: 0 20px 60px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .card-banner {
+            height: 6px;
+            background: linear-gradient(90deg, var(--blue), #004bb5);
+        }
+        .card-body { padding: 40px; }
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin: 0 0 8px;
+        }
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 32px;
+        }
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 32px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text);
+        }
+        p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #374151;
+            margin: 0 0 14px;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 0 0 14px;
+        }
+        ul li {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .highlight-box {
+            background: #e8f1ff;
+            border-left: 4px solid var(--blue);
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: var(--text);
+        }
+        a { color: var(--blue); }
+        @media (max-width: 600px) {
+            .card-body { padding: 24px; }
+            .page-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>NattyPro.Life</h1>
+    <a href="/" class="back-btn">← Back to Forum</a>
+</header>
+
+<div class="container">
+    <div class="card">
+        <div class="card-banner"></div>
+        <div class="card-body">
+
+            <h1 class="page-title">Privacy Policy</h1>
+            <p class="last-updated">Last updated: April 2026</p>
+
+            <div class="highlight-box">
+                Your privacy matters to us. NattyPro.Life is a community built on trust — we collect only what we need to run the platform and never sell your data to third parties.
+            </div>
+
+            <h2>1. Who We Are</h2>
+            <p>NattyPro.Life is an online forum and community platform dedicated to natural bodybuilding. We are operated independently and are committed to protecting the privacy of our members.</p>
+
+            <h2>2. Information We Collect</h2>
+            <p>When you register and use NattyPro.Life, we collect the following information:</p>
+            <ul>
+                <li><strong>Account information:</strong> Username, email address, and encrypted password</li>
+                <li><strong>Profile information:</strong> Bio, age (optional), avatar image, and social media handles you choose to share</li>
+                <li><strong>Content you post:</strong> Forum posts, comments, and any other content you submit to the platform</li>
+                <li><strong>Usage data:</strong> Pages visited, posts upvoted, threads followed, and general interaction with the platform</li>
+            </ul>
+
+            <h2>3. How We Use Your Information</h2>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Create and manage your account</li>
+                <li>Display your profile and content to other members</li>
+                <li>Send important account notifications (password resets, email confirmations)</li>
+                <li>Enforce our community guidelines and terms of service</li>
+                <li>Improve the platform based on usage patterns</li>
+            </ul>
+
+            <h2>4. Information We Do NOT Collect</h2>
+            <p>We do not collect payment information, track your activity outside of NattyPro.Life, or use advertising trackers or third-party analytics that profile you across the web.</p>
+
+            <h2>5. How We Protect Your Data</h2>
+            <p>All passwords are encrypted using BCrypt hashing — we cannot see your password. Your data is stored on secured servers. We use HTTPS to encrypt all data in transit between your browser and our servers.</p>
+
+            <h2>6. Data Sharing</h2>
+            <p>We do not sell, rent, or share your personal information with third parties for marketing purposes. We may share data only in the following limited circumstances:</p>
+            <ul>
+                <li>When required by law or legal process</li>
+                <li>To protect the safety of our members or the public</li>
+                <li>With service providers who help us operate the platform (e.g. email delivery) under strict confidentiality agreements</li>
+            </ul>
+
+            <h2>7. Your Privacy Controls</h2>
+            <p>You have control over your information. From your profile settings you can:</p>
+            <ul>
+                <li>Choose whether to display your age and email address publicly</li>
+                <li>Update or remove your bio, avatar, and social media links at any time</li>
+                <li>Request deletion of your account by contacting us</li>
+            </ul>
+
+            <h2>8. Cookies</h2>
+            <p>NattyPro.Life uses session cookies to keep you logged in. We do not use advertising cookies or third-party tracking cookies.</p>
+
+            <h2>9. Minors</h2>
+            <p>NattyPro.Life requires all users to be at least 15 years of age. We do not knowingly collect personal information from children under 15. If we become aware that a user is under 15, we will terminate their account.</p>
+
+            <h2>10. Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. We will notify registered members of significant changes via email or a notice on the platform.</p>
+
+            <h2>11. Contact Us</h2>
+            <p>If you have questions about this Privacy Policy or how your data is handled, please contact us using the Contact form on the NattyPro.Life homepage.</p>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

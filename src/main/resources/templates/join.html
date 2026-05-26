@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Join NattyPro.Life</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --blue: #0070f3;
+            --blue-light: #e8f1ff;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0; padding: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,112,243,0.3);
+            position: sticky; top: 0; z-index: 100;
+        }
+        header a { text-decoration: none; color: white; }
+        header h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 7px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+        .container { max-width: 560px; margin: 48px auto; padding: 0 20px; }
+
+        .join-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .join-banner {
+            height: 6px;
+            background: linear-gradient(90deg, var(--blue), #004bb5);
+        }
+
+        .join-body { padding: 36px 32px; }
+
+        .join-eyebrow {
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.6px;
+            color: var(--blue); margin-bottom: 10px;
+        }
+
+        .join-body h2 {
+            margin: 0 0 10px;
+            font-size: 1.7rem; font-weight: 700;
+            letter-spacing: -0.5px; line-height: 1.2;
+        }
+
+        .join-lead {
+            font-size: 15px; color: var(--text-muted);
+            line-height: 1.6; margin: 0 0 24px;
+        }
+
+        .join-list { list-style: none; margin: 0 0 28px; padding: 0; }
+        .join-list li {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 9px 0; font-size: 14px; line-height: 1.5;
+            border-bottom: 1px solid var(--border);
+        }
+        .join-list li:last-child { border-bottom: none; }
+        .join-list .ji { font-size: 16px; flex-shrink: 0; }
+
+        .cta-btn {
+            display: block; width: 100%;
+            background: var(--blue); color: white;
+            padding: 13px 24px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 15px; font-weight: 700;
+            font-family: 'DM Sans', sans-serif;
+            text-align: center; text-decoration: none;
+            transition: background 0.2s;
+        }
+        .cta-btn:hover { background: #005ed4; }
+
+        .join-secondary {
+            text-align: center; margin-top: 16px;
+            font-size: 14px; color: var(--text-muted);
+        }
+        .join-secondary a { color: var(--blue); font-weight: 600; text-decoration: none; }
+        .join-secondary a:hover { text-decoration: underline; }
+
+        .join-tagline {
+            text-align: center; margin-top: 28px;
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.3px; color: var(--text-muted);
+        }
+
+        @media (max-width: 600px) {
+            .container { margin: 24px auto; }
+            .join-body { padding: 26px 20px; }
+            .join-body h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/"><h1>NattyPro.Life</h1></a>
+    <a href="/" class="back-btn">← Back to Forum</a>
+</header>
+
+<div class="container">
+    <div class="join-card">
+        <div class="join-banner"></div>
+        <div class="join-body">
+
+            <div class="join-eyebrow">Free Membership</div>
+            <h2>Stop lurking. Start contributing.</h2>
+            <p class="join-lead">
+                Reading the forum is open to everyone. Posting, replying, voting,
+                following threads, and the live chat rooms are for members —
+                and an account is completely free.
+            </p>
+
+            <ul class="join-list">
+                <li><span class="ji">💬</span><span>Post and reply across all eight categories — Training, Nutrition, Prep Files, Coaches Corner and more</span></li>
+                <li><span class="ji">🔔</span><span>Follow threads and get notified when there's a new reply</span></li>
+                <li><span class="ji">👍</span><span>Upvote the posts and comments that earn it</span></li>
+                <li><span class="ji">🗨️</span><span>Jump into the live chat rooms with the community</span></li>
+                <li><span class="ji">🏆</span><span>Earn your rank as you contribute — from Lurker to Legend</span></li>
+                <li><span class="ji">⭐</span><span>Verified natural competitors can apply for a PRO badge</span></li>
+            </ul>
+
+            <a href="/register" class="cta-btn">Create Your Free Account</a>
+
+            <div class="join-secondary">
+                Already a member? <a href="/login">Log in</a>
+            </div>
+
+            <div class="join-tagline">
+                Drug-free · Knowledge-driven · Competition-ready
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

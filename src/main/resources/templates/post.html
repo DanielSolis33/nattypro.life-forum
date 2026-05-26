@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<script>
+function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+}
+
+function linkify(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex,
+        '<a href="$1" target="_blank" rel="noopener noreferrer" ' +
+        'style="color:#007bff; word-break:break-all;">$1</a>');
+}
+
+// Post content is rich HTML from the editor — rendered as-is, no JS processing.
+// Comments are plain text: escape first (blocks HTML injection), then linkify URLs.
+window.onload = function() {
+    document.querySelectorAll('.comment-content').forEach(function(el) {
+        el.innerHTML = linkify(escapeHtml(el.textContent));
+    });
+};
+</script>
+
+
+<head>
+    <title th:text="${post.title}">Post</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --blue: #0070f3;
+            --blue-light: #e8f1ff;
+            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500);
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* ── Header ── */
+		header {
+		    background: #0070f3;
+		    color: white;
+		    padding: 14px 24px;
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    box-shadow: 0 2px 8px rgba(0,112,243,0.3);
+		    position: sticky;
+		    top: 0;
+		    z-index: 100;
+		}
+        header a { text-decoration: none; color: white; }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 7px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+        /* ── Layout ── */
+        .container {
+            max-width: 780px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        /* ── Post Detail ── */
+        .post-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .post-banner {
+            height: 6px;
+            background: linear-gradient(90deg, var(--blue), #004bb5);
+        }
+
+        .post-body {
+            padding: 28px;
+        }
+
+        .post-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+		
+		.follow-btn {
+		    display: flex;
+		    align-items: center;
+		    gap: 6px;
+		    background: var(--bg);
+		    border: 1px solid var(--border);
+		    border-radius: 8px;
+		    padding: 6px 14px;
+		    cursor: pointer;
+		    font-size: 14px;
+		    font-weight: 600;
+		    font-family: 'DM Sans', sans-serif;
+		    color: var(--text);
+		    transition: all 0.2s;
+		}
+		.follow-btn:hover { border-color: var(--blue); color: var(--blue); }
+		.follow-btn.following { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+        .category-badge {
+            display: inline-block;
+            background: var(--blue-light);
+            color: var(--blue);
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        /* Vote button */
+        .upvote-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .upvote-btn:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .upvote-btn.voted {
+            background: #fffbeb;
+            border-color: #f5a623;
+            color: #b45309;
+        }
+
+        .vote-display {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .post-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.25;
+            margin: 0 0 20px;
+            color: var(--text);
+        }
+
+        .post-content {
+    line-height: 1.7;
+    font-size: 15px;
+    color: var(--text);
+    word-wrap: break-word;
+    margin: 0 0 24px;
+}
+
+/* ← add these two new rules right here */
+.post-content p {
+    margin: 0 0 12px;
+}
+
+.post-content p:last-child {
+    margin-bottom: 0;
+}
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: var(--text-muted);
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .author-link {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .author-link:hover { text-decoration: underline; }
+
+        .pro-badge {
+            display: inline-block;
+            background: var(--gold-gradient);
+            color: #000;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .dot { color: var(--border); }
+
+        /* ── Comments ── */
+        .comments-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .comments-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .comments-header h2 {
+            margin: 0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        .count-badge {
+            background: var(--blue-light);
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .comment {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .comment:hover { background: var(--bg); }
+        .comment:last-of-type { border-bottom: none; }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .comment-author {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .comment-time {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .comment-content {
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .empty-comments {
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* ── Add Comment ── */
+        .add-comment {
+            padding: 20px 24px;
+            border-top: 2px solid var(--bg);
+            background: var(--bg);
+        }
+
+        .add-comment h3 {
+            margin: 0 0 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        .add-comment textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--white);
+            resize: vertical;
+            min-height: 90px;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .add-comment textarea:focus { border-color: var(--blue); }
+
+        .submit-btn {
+            background: var(--blue);
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            transition: background 0.2s;
+            min-height: 40px;
+        }
+
+        .submit-btn:hover { background: #005ed4; }
+
+        /* ── Mobile ── */
+        @media (max-width: 600px) {
+            .container { margin: 16px auto; padding: 0 12px; }
+            .post-body { padding: 18px 16px; }
+            .post-title { font-size: 1.35rem; }
+            .comment, .comments-header, .add-comment { padding-left: 16px; padding-right: 16px; }
+            .submit-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+	<a href="/" style="text-decoration:none; color:white;">
+	    <h1>NattyPro.Life Forum</h1>
+	</a>
+    <a href="/" class="back-btn">← Back to Forum</a>
+</header>
+
+<div class="container">
+
+    <!-- ── Post Detail ── -->
+    <div class="post-card">
+        <div class="post-banner"></div>
+        <div class="post-body">
+
+            <div class="post-top">
+                <span class="category-badge" th:text="${post.category}">Category</span>
+
+                <!-- Vote button (logged in, not own post) -->
+                <div th:if="${currentUser != null and currentUser != post.author}">
+                    <button class="upvote-btn"
+                            th:classappend="${hasVoted} ? 'voted' : ''"
+                            th:data-post-id="${post.id}"
+                            onclick="toggleVote(this)">
+                        👍 <span class="vote-count" th:text="${post.voteCount}">0</span>
+                    </button>
+                </div>
+				
+				<!-- Follow button (logged in only) -->
+				<div th:if="${currentUser != null}">
+				    <button class="follow-btn"
+				            th:classappend="${isFollowing} ? 'following' : ''"
+				            th:data-post-id="${post.id}"
+				            onclick="toggleFollow(this)">
+				        <span th:text="${isFollowing} ? '🔔 Following' : '🔕 Follow Thread'">Follow</span>
+				    </button>
+				</div>
+				
+                <!-- Vote count only (not logged in) -->
+                <div class="vote-display" th:unless="${currentUser != null}">
+                    👍 <span th:text="${post.voteCount}">0</span>
+                </div>
+            </div>
+
+            <h1 class="post-title" th:text="${post.title}">Post Title</h1>
+            <div class="post-content" th:utext="${post.content}">Post content</div>
+            
+            <div th:if="${post.imageUrls != null and !#lists.isEmpty(post.imageUrls)}"
+     style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+    <a th:each="img : ${post.imageUrls}"
+       th:href="${img}" target="_blank">
+        <img th:src="${img}"
+             style="max-width:200px; max-height:200px; object-fit:cover;
+                    border-radius:8px; border:1px solid var(--border);
+                    cursor:pointer;"/>
+    </a>
+</div>
+
+            <div class="post-meta">
+                <span>Posted by</span>
+                <a th:href="@{/profile/{username}(username=${post.author})}"
+                   class="author-link" th:text="${post.author}">Author</a>
+                <span class="pro-badge" th:if="${postAuthorPro}">PRO</span>
+                <span class="dot">•</span>
+                <span th:if="${post.createdAt}"
+                      th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+                <span th:if="${currentUser != null and (currentUser.username == post.author or #authorization.expression('hasRole(''ADMIN'')'))}">
+                    <span class="dot">•</span>
+                    <a th:href="@{/post/{id}/edit(id=${post.id})}"
+                       style="color:var(--blue); text-decoration:none; font-weight:600; font-size:13px;">✏️ Edit</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Comments ── -->
+    <div class="comments-card">
+        <div class="comments-header">
+            <h2>Comments</h2>
+            <span class="count-badge" th:text="${#lists.size(comments)}">0</span>
+        </div>
+
+        <div class="empty-comments" th:if="${#lists.isEmpty(comments)}">
+            No comments yet — be the first!
+        </div>
+
+      <div th:each="comment : ${comments}" class="comment">
+            <div class="comment-header">
+                <a th:href="@{/profile/{username}(username=${comment.author})}"
+                   class="author-link comment-author" th:text="${comment.author}">Author</a>
+                <span class="pro-badge" th:if="${commentProStatus != null and commentProStatus[comment.author]}">PRO</span>
+                <span class="dot">•</span>
+                <span class="comment-time"
+                      th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Time</span>
+
+                <!-- Comment upvote -->
+                <span th:if="${currentUser != null and currentUser.username != comment.author}"
+                      style="margin-left:auto;">
+                    <button class="upvote-btn"
+                            th:classappend="${commentVotedMap != null and commentVotedMap[comment.id]} ? 'voted' : ''"
+                            th:data-comment-id="${comment.id}"
+                            onclick="toggleCommentVote(this)"
+                            style="padding:4px 10px; font-size:13px;">
+                        👍 <span class="vote-count" th:text="${comment.voteCount}">0</span>
+                    </button>
+                </span>
+                <span th:if="${currentUser == null}"
+                      style="margin-left:auto; font-size:13px; color:var(--text-muted);">
+                    👍 <span th:text="${comment.voteCount}">0</span>
+                </span>
+            </div>
+            <p class="comment-content" th:text="${comment.content}">Comment content</p>
+        </div>
+        <!-- Add Comment - members only -->
+<div class="add-comment" sec:authorize="isAuthenticated()">
+    <h3>Add a Comment</h3>
+    <form th:action="@{/post/{id}/comment(id=${post.id})}" th:object="${newComment}" method="post">
+        <textarea th:field="*{content}" placeholder="Write your comment..." required></textarea>
+        <button type="submit" class="submit-btn">Post Comment</button>
+    </form>
+</div>
+
+<!-- Guest CTA -->
+<div class="add-comment" sec:authorize="isAnonymous()" style="text-align:center;">
+    <h3>Join the Discussion</h3>
+    <p style="font-size:14px; color:var(--text-muted); line-height:1.6; margin:0 0 14px;">
+        Want to reply to this thread? Create a free account to post comments,
+        upvote, and follow the conversation.
+    </p>
+    <a href="/join" class="submit-btn" style="text-decoration:none; display:inline-block;">
+        Join NattyPro.Life →
+    </a>
+</div><!-- Add Comment -->
+        <div class="add-comment">
+            <h3>Add a Comment</h3>
+            <form th:action="@{/post/{id}/comment(id=${post.id})}" th:object="${newComment}" method="post">
+                <textarea th:field="*{content}" placeholder="Write your comment..." required></textarea>
+                <button type="submit" class="submit-btn">Post Comment</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function toggleVote(btn) {
+    const postId = btn.dataset.postId;
+    fetch(`/vote/post/${postId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) return;
+        btn.querySelector('.vote-count').textContent = data.voteCount;
+        btn.classList.toggle('voted', data.voted);
+    });
+}
+function toggleCommentVote(btn) {
+    const commentId = btn.dataset.commentId;
+    fetch(`/vote/comment/${commentId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) return;
+        btn.querySelector('.vote-count').textContent = data.voteCount;
+        btn.classList.toggle('voted', data.voted);
+    });
+}
+function toggleFollow(btn) {
+    const postId = btn.dataset.postId;
+    fetch(`/follow/post/${postId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) return;
+        btn.classList.toggle('following', data.following);
+        btn.querySelector('span').textContent = data.following ? '🔔 Following' : '🔕 Follow Thread';
+    });
+
+}
+</script>
+</body>
+</html>

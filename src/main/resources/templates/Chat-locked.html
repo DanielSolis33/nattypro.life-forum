@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chat Access - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --blue: #0070f3;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 440px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .card-banner {
+            height: 6px;
+            background: linear-gradient(90deg, var(--blue), #004bb5);
+        }
+        .card-body { padding: 36px; text-align: center; }
+        .icon { font-size: 44px; margin-bottom: 14px; }
+        h2 { margin: 0 0 8px; font-size: 1.4rem; font-weight: 700; }
+        p { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin: 0 0 24px; }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus { border-color: var(--blue); }
+        .error-msg {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+        .submit-btn {
+            width: 100%;
+            background: var(--blue);
+            color: white;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover { background: #005ed4; }
+        .back-link {
+            display: block;
+            margin-top: 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+            text-decoration: none;
+        }
+        .back-link:hover { color: var(--blue); }
+    </style>
+</head>
+<body>
+    <header>NattyPro.Life</header>
+    <div class="container">
+        <div class="card">
+            <div class="card-banner"></div>
+            <div class="card-body">
+                <div class="icon">🔐</div>
+                <h2>Chat Room Access</h2>
+                <p>The NattyPro.Life chat room is invite-only. Enter your PIN below to unlock access.</p>
+                <div class="error-msg" th:if="${error}" th:text="${error}"></div>
+                <form action="/chat/unlock" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="text" name="pin" placeholder="XXXXXXXX" maxlength="8" required autofocus/>
+                    <button type="submit" class="submit-btn">Unlock Chat →</button>
+                </form>
+                <a href="/" class="back-link">← Back to Forum</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

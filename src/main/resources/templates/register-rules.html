@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Community Guidelines - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --blue: #0070f3;
+            --blue-light: #e8f1ff;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 680px;
+            margin: 40px auto;
+            padding: 0 20px 60px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .card-banner {
+            height: 6px;
+            background: linear-gradient(90deg, var(--blue), #004bb5);
+        }
+        .card-body { padding: 32px; }
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        h2 {
+            margin: 0 0 16px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 15px;
+            margin: 0 0 12px;
+        }
+        /* Video placeholder */
+        .video-placeholder {
+            background: #1a1a2e;
+            border-radius: 8px;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.5);
+        }
+        /* Rules list */
+        .rules-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .rules-list li {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .rules-list li:last-child { border-bottom: none; }
+        .rule-num {
+            background: var(--blue-light);
+            color: var(--blue);
+            font-weight: 700;
+            font-size: 12px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        /* Acknowledgement */
+        .ack-box {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .ack-box:has(input:checked) { border-color: var(--blue); background: var(--blue-light); }
+        .ack-box input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            cursor: pointer;
+            accent-color: var(--blue);
+        }
+        .ack-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        .error-msg {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .submit-btn {
+            width: 100%;
+            background: var(--blue);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover { background: #005ed4; }
+        @media (max-width: 600px) {
+            .card-body { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>NattyPro.Life</header>
+
+    <div class="container">
+
+        <!-- Mission Section -->
+        <div class="card">
+            <div class="card-banner"></div>
+            <div class="card-body">
+                <div class="section-label">Our Mission</div>
+                <h2>Welcome to NattyPro.Life 👊</h2>
+
+                <!-- YouTube embed — swap src when ready -->
+                <div class="video-placeholder">
+                    🎬 Mission video coming soon
+                </div>
+
+                <p>NattyPro.Life is a community built for serious natural bodybuilders — from first-time competitors to seasoned pros. Our mission is to provide a space free from the noise of enhanced culture, where real knowledge, real results, and real community thrive.</p>
+                <p>This is a place to learn, share, compete, and grow — the natural way.</p>
+            </div>
+        </div>
+
+        <!-- Rules Section -->
+        <div class="card">
+            <div class="card-banner"></div>
+            <div class="card-body">
+                <div class="section-label">Community Guidelines</div>
+                <h2>The Rules</h2>
+
+                <ul class="rules-list">
+                    <li>
+                        <span class="rule-num">1</span>
+                        <span><strong>Respect everyone.</strong> Healthy debate is welcome. Personal attacks, harassment, and disrespect are not. Treat every member the way you'd want to be treated on stage.</span>
+                    </li>
+                    <li>
+                        <span class="rule-num">2</span>
+                        <span><strong>No spam.</strong> Do not flood posts, comments, or chat with repetitive or irrelevant content. Quality over quantity.</span>
+                    </li>
+                    <li>
+                        <span class="rule-num">3</span>
+                        <span><strong>No direct or indirect marketing.</strong> Do not promote products, services, or brands without explicit permission from the admin. This includes subtle endorsements.</span>
+                    </li>
+                    <li>
+                        <span class="rule-num">4</span>
+                        <span><strong>Natural bodybuilding only.</strong> This community is dedicated to drug-free athletes. Discussion that promotes or glorifies PED use is not permitted.</span>
+                    </li>
+                    <li>
+                        <span class="rule-num">5</span>
+                        <span><strong>No sharing of personal information.</strong> Do not post other people's private information without their consent.</span>
+                    </li>
+                    <li>
+                        <span class="rule-num">6</span>
+                        <span><strong>Keep it legal.</strong> No content that is illegal, defamatory, or violates anyone's rights.</span>
+                    </li>
+                    <li>
+                        <span class="rule-num">7</span>
+                        <span><strong>Violations have consequences.</strong> Breaking these rules may result in a warning, mute, or account suspension depending on severity and frequency.</span>
+                    </li>
+                </ul>
+
+                <!-- Error message -->
+                <div class="error-msg" th:if="${error}" th:text="${error}"></div>
+
+                <!-- Acknowledgement form -->
+                <form action="/register/rules" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <label class="ack-box">
+                        <input type="checkbox" name="acceptRules" value="yes"/>
+                        <span class="ack-text">I have read and agree to the NattyPro.Life Community Guidelines. I understand that violations may result in account restrictions.</span>
+                    </label>
+                    <button type="submit" class="submit-btn">Complete Registration →</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

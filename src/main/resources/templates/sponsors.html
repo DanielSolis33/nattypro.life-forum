@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sponsors - NattyPro.Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --blue: #0070f3;
+            --blue-light: #e8f1ff;
+            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500);
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,112,243,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+        .back-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 7px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.25); }
+        .container {
+            max-width: 780px;
+            margin: 40px auto;
+            padding: 0 20px 60px;
+        }
+        .hero {
+            background: #1a1a2e;
+            border-radius: var(--radius);
+            padding: 48px 40px;
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '💪';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.05;
+            top: -40px;
+            right: -20px;
+        }
+        .hero h2 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 12px;
+            letter-spacing: -0.5px;
+        }
+        .hero p {
+            color: rgba(255,255,255,0.7);
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 0 0 28px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-btn {
+            display: inline-block;
+            background: var(--blue);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .hero-btn:hover { background: #005ed4; }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .card-banner {
+            height: 6px;
+            background: linear-gradient(90deg, var(--blue), #004bb5);
+        }
+        .card-body { padding: 32px; }
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 0 16px;
+            letter-spacing: -0.3px;
+        }
+        p {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #374151;
+            margin: 0 0 14px;
+        }
+        .perks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .perk-item {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .perk-icon { font-size: 24px; flex-shrink: 0; }
+        .perk-text strong { display: block; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+        .perk-text span { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+        .who-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .who-item {
+            background: var(--blue-light);
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+        .who-item .who-icon { font-size: 24px; display: block; margin-bottom: 6px; }
+        .placeholder-box {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 20px 0;
+        }
+        .placeholder-box .placeholder-icon { font-size: 36px; margin-bottom: 12px; }
+        .placeholder-box p { margin: 0; color: var(--text-muted); }
+        .cta-box {
+            background: var(--blue-light);
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .cta-box p { color: var(--text); margin: 0 0 16px; font-weight: 500; }
+        .cta-btn {
+            display: inline-block;
+            background: var(--blue);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .cta-btn:hover { background: #005ed4; }
+        .back-bottom {
+            text-align: center;
+            margin-top: 32px;
+        }
+        .back-bottom a {
+            display: inline-block;
+            background: var(--blue);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .back-bottom a:hover { background: #005ed4; }
+        @media (max-width: 600px) {
+            .hero { padding: 32px 20px; }
+            .hero h2 { font-size: 1.5rem; }
+            .card-body { padding: 20px; }
+            .perks-grid { grid-template-columns: 1fr; }
+            .who-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>NattyPro.Life</h1>
+    <a href="/" class="back-btn">← Back to Forum</a>
+</header>
+
+<div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+        <h2>Support the Natural Movement 💪</h2>
+        <p>NattyPro.Life is built by and for natural bodybuilders. If your brand believes in what we believe in — hard work, drug-free sport, and real results — we'd love to talk.</p>
+        <a href="#contact" class="hero-btn">Get in Touch →</a>
+    </div>
+
+    <!-- Who we are -->
+    <div class="card">
+        <div class="card-banner"></div>
+        <div class="card-body">
+            <h3>Who's Here</h3>
+            <p>Our community is made up of serious, committed natural athletes. These aren't casual gym-goers — these are people who track their macros, study their programming, and compete on stage. They're also the people most likely to invest in quality products that align with their lifestyle.</p>
+
+            <div class="who-grid">
+                <div class="who-item">
+                    <span class="who-icon">🏆</span>
+                    Natural competitors
+                </div>
+                <div class="who-item">
+                    <span class="who-icon">📚</span>
+                    Serious lifters
+                </div>
+                <div class="who-item">
+                    <span class="who-icon">🧬</span>
+                    Drug-free athletes
+                </div>
+                <div class="who-item">
+                    <span class="who-icon">🥗</span>
+                    Nutrition focused
+                </div>
+                <div class="who-item">
+                    <span class="who-icon">💡</span>
+                    Knowledge seekers
+                </div>
+                <div class="who-item">
+                    <span class="who-icon">🎯</span>
+                    Goal driven
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- What you get -->
+    <div class="card">
+        <div class="card-banner"></div>
+        <div class="card-body">
+            <h3>What Sponsorship Looks Like</h3>
+            <p>We keep it real here — no fake endorsements, no pay-to-play reviews. Sponsorship on NattyPro.Life means genuine visibility with an audience that actually cares about what you offer.</p>
+
+            <div class="perks-grid">
+                <div class="perk-item">
+                    <span class="perk-icon">🖼️</span>
+                    <div class="perk-text">
+                        <strong>Banner Placement</strong>
+                        <span>Your brand featured in the rotating homepage banner</span>
+                    </div>
+                </div>
+                <div class="perk-item">
+                    <span class="perk-icon">🔗</span>
+                    <div class="perk-text">
+                        <strong>Footer Link</strong>
+                        <span>Permanent sponsor link in the site footer</span>
+                    </div>
+                </div>
+                <div class="perk-item">
+                    <span class="perk-icon">📣</span>
+                    <div class="perk-text">
+                        <strong>Ticker Announcements</strong>
+                        <span>Product launches and promos in the news ticker</span>
+                    </div>
+                </div>
+                <div class="perk-item">
+                    <span class="perk-icon">✅</span>
+                    <div class="perk-text">
+                        <strong>Community Trust</strong>
+                        <span>Association with a verified natural bodybuilding community</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Sponsors placeholder -->
+    <div class="card">
+        <div class="card-banner"></div>
+        <div class="card-body">
+            <h3>Current Sponsors</h3>
+            <div class="placeholder-box">
+                <div class="placeholder-icon">🌟</div>
+                <p>Sponsor spots are open! Be the first brand to support NattyPro.Life and reach our community of dedicated natural athletes.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="card" id="contact">
+        <div class="card-banner"></div>
+        <div class="card-body">
+            <h3>Ready to Talk?</h3>
+            <p>We're not looking for just any brand — we want partners who genuinely believe in natural bodybuilding and want to support this community. If that's you, reach out and let's figure something out.</p>
+            <div class="cta-box">
+                <p>Shoot us a message and tell us about your brand — we'll get back to you!</p>
+                <a href="/#contactModal" class="cta-btn" onclick="window.location.href='/'; setTimeout(() => document.getElementById('contactModal')?.classList.add('show'), 500);">
+                    Contact Us About Sponsorship →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-bottom">
+        <a href="/">← Back to Forum</a>
+    </div>
+
+</div>
+
+</body>
+</html>

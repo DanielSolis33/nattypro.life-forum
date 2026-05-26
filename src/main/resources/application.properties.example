@@ -1,0 +1,4 @@
+spring.mail.username=YOUR_EMAIL@gmail.com
+spring.mail.password=YOUR_APP_PASSWORD
+youtube.api.key=YOUR_YOUTUBE_API_KEY
+app.base-url=http://localhost:8081

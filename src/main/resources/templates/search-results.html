@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title th:text="'Search: ' + ${query} + ' - NattyPro.Life'">Search Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --blue: #0070f3;
+            --blue-light: #e8f1ff;
+            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500);
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f4f6fb;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        header {
+            background: var(--blue);
+            color: white;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,112,243,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-left a { text-decoration: none; color: white; }
+        .header-left h1 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.3px; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .user-info { text-align: right; font-size: 13px; line-height: 1.4; }
+        .user-info a { color: white; text-decoration: underline; font-weight: 600; }
+        .user-info small { opacity: 0.85; display: block; }
+        .header-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 7px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .header-btn:hover { background: rgba(255,255,255,0.25); }
+        .container {
+            max-width: 860px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+        .search-header {
+            margin-bottom: 24px;
+        }
+        .search-header h2 {
+            margin: 0 0 4px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .search-header p {
+            margin: 0 0 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 8px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            background: var(--white);
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus { border-color: var(--blue); }
+        .submit-btn {
+            background: var(--blue);
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover { background: #005ed4; }
+        .results-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding: 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .count-badge {
+            background: var(--blue-light);
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-family: 'DM Mono', monospace;
+        }
+        .post-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            transition: box-shadow 0.2s, transform 0.15s;
+        }
+        .post-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        .post-card-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .category-badge {
+            display: inline-block;
+            background: var(--blue-light);
+            color: var(--blue);
+            padding: 2px 9px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .post-title-link {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: -0.2px;
+            line-height: 1.3;
+        }
+        .post-title-link:hover { color: var(--blue); }
+        .post-excerpt {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0 0 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .post-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+        }
+        .post-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .author-link {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .author-link:hover { text-decoration: underline; }
+        .pro-badge {
+            display: inline-block;
+            background: var(--gold-gradient);
+            color: #000;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            vertical-align: middle;
+        }
+        .dot { color: var(--border); }
+        .view-link {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .view-link:hover { text-decoration: underline; }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state h3 { margin: 0 0 8px; font-size: 1.1rem; color: var(--text); }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .container { margin: 16px auto; padding: 0 12px; }
+            .post-card { padding: 14px 16px; }
+            .header-right .user-info { display: none; }
+            .submit-btn { padding: 10px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <a href="/"><h1>NattyPro.Life</h1></a>
+    </div>
+    <div class="header-right" th:if="${#authorization.expression('isAuthenticated()')}">
+        <div class="user-info">
+            <span>Welcome, </span>
+            <a th:href="@{/profile/{username}(username=${#authentication.name})}"
+               th:text="${#authentication.name}">User</a>
+            <small>
+                <span th:text="${rankEmoji}">🌱</span>
+                <span th:text="${userRank}">Member</span> •
+                <span th:text="${userPostCount}">0</span> posts
+            </small>
+        </div>
+        <a th:href="@{/profile/{username}(username=${#authentication.name})}" class="header-btn">My Profile</a>
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+           href="/admin/pins" class="header-btn">🔐 Pins</a>
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+           href="/admin/users" class="header-btn">👥 Users</a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="header-btn">Logout</button>
+        </form>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- Search Header -->
+    <div class="search-header">
+        <h2>Search Results</h2>
+        <p th:text="'Showing results for: ' + ${query}">query</p>
+        <form action="/search" method="get" class="search-bar">
+            <input type="text" name="query" th:value="${query}" placeholder="Search posts, topics, authors..."/>
+            <button type="submit" class="submit-btn">Search</button>
+        </form>
+    </div>
+
+    <!-- Results Label -->
+    <div class="results-label">
+        Results
+        <span class="count-badge" th:text="${resultCount}">0</span>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" th:if="${#lists.isEmpty(results)}">
+        <div class="icon">🔍</div>
+        <h3>No results found</h3>
+        <p>Try a different search term or browse the categories.</p>
+        <a href="/" class="back-link">← Back to Forum</a>
+    </div>
+
+    <!-- Results -->
+    <div th:each="post : ${results}" class="post-card">
+        <div class="post-card-top">
+            <span class="category-badge" th:text="${post.category}">Category</span>
+        </div>
+        <a th:href="@{/post/{id}(id=${post.id})}" class="post-title-link" th:text="${post.title}">Post Title</a>
+        <p class="post-excerpt" th:text="${post.content}">Content preview...</p>
+        <div class="post-footer">
+            <div class="post-footer-left">
+                <span>By</span>
+                <a th:href="@{/profile/{username}(username=${post.author})}"
+                   class="author-link" th:text="${post.author}">Author</a>
+                <span class="pro-badge" th:if="${proStatusMap[post.author]}">PRO</span>
+                <span class="dot">•</span>
+                <span th:if="${post.createdAt}"
+                      th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy')}">Date</span>
+            </div>
+            <div>
+                <a th:href="@{/post/{id}(id=${post.id})}" class="view-link">View Thread →</a>
+            </div>
+        </div>
+    </div>
+
+    <a href="/" class="back-link" th:if="${!#lists.isEmpty(results)}">← Back to Forum</a>
+
+</div>
+</body>
+</html>
