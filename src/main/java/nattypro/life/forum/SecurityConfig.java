@@ -50,7 +50,7 @@ public class SecurityConfig {
 
                 // Auth / account / public info pages
                 .requestMatchers(
-                    "/register", "/register/age", "/register/rules",
+                     "/error","/register", "/register/age", "/register/rules",
                     "/join",
                     "/login", "/forgot-password", "/reset-password", "/confirm-email",
                     "/h2-console/**",
