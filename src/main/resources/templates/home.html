@@ -886,6 +886,10 @@
 <script>
 	const slides = document.querySelectorAll('.banner-slide');
 	let current = 0;
+    //Start at whichever banner Thymeleaf marked as active (first banner by default)
+    slides.forEach((slide, index) => {
+        if (slide.classList.contains('active')) current = index;
+    });
 	let bannerTimer;
 
 	function goToSlide(index) {
