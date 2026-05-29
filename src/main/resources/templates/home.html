@@ -864,8 +864,7 @@
     <div class="modal">
         <button class="modal-close" onclick="document.getElementById('contactModal').classList.remove('show')">✕</button>
         <h3>Contact Us</h3>
-        <form action="/contact/submit" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+   <form th:action="@{/contact/submit}" method="post">
             <input type="text" name="name" placeholder="Your name" required/>
             <input type="text" name="email" placeholder="Your email" required/>
             <select name="subject" required>

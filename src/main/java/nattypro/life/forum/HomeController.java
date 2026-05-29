@@ -111,16 +111,19 @@
 	        
 	     // User stats and rank for header
 
-		 model.addAttribute("announcements", announcementRepo.findByIsActiveTrueOrderByCreatedAtDesc());
-	            model.addAttribute("banners", bannerRepo.findByIsActiveTrueOrderByDisplayOrderAsc());
-	            
-	         // YouTube feed for banner
-	            if (youtubeFeedService.hasCachedVideos()) {
-	                model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
-	            } else {
-	                youtubeFeedService.initializeCache();
-	                model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
-	            }
+		// Banner + YouTube — available to guests and members alike
+model.addAttribute("announcements", announcementRepo.findByIsActiveTrueOrderByCreatedAtDesc());
+model.addAttribute("banners", bannerRepo.findByIsActiveTrueOrderByDisplayOrderAsc());
+try {
+    if (youtubeFeedService.hasCachedVideos()) {
+        model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
+    } else {
+        youtubeFeedService.initializeCache();
+        model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
+    }
+} catch (Exception e) {
+    System.err.println("YouTube feed unavailable: " + e.getMessage());
+}
 
 	        if (authentication != null) {
 	            User currentUser = userRepository.findByUsername(authentication.getName()).orElse(null);
