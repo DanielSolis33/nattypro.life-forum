@@ -110,6 +110,18 @@
 	        model.addAttribute("categories", CATEGORIES);
 	        
 	     // User stats and rank for header
+
+		 model.addAttribute("announcements", announcementRepo.findByIsActiveTrueOrderByCreatedAtDesc());
+	            model.addAttribute("banners", bannerRepo.findByIsActiveTrueOrderByDisplayOrderAsc());
+	            
+	         // YouTube feed for banner
+	            if (youtubeFeedService.hasCachedVideos()) {
+	                model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
+	            } else {
+	                youtubeFeedService.initializeCache();
+	                model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
+	            }
+
 	        if (authentication != null) {
 	            User currentUser = userRepository.findByUsername(authentication.getName()).orElse(null);
 	            model.addAttribute("currentUser", currentUser);
@@ -145,16 +157,7 @@
 	            model.addAttribute("userPostCount", userPostCount);
 	            model.addAttribute("userRank", userRank);
 	            model.addAttribute("rankEmoji", rankEmoji);
-	            model.addAttribute("announcements", announcementRepo.findByIsActiveTrueOrderByCreatedAtDesc());
-	            model.addAttribute("banners", bannerRepo.findByIsActiveTrueOrderByDisplayOrderAsc());
 	            
-	         // YouTube feed for banner
-	            if (youtubeFeedService.hasCachedVideos()) {
-	                model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
-	            } else {
-	                youtubeFeedService.initializeCache();
-	                model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
-	            }
 	        }
 	        
 	        return "home";
