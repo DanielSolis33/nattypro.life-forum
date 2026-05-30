@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -36,48 +34,36 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-          CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         http
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
-                // Admin — must hold ROLE_ADMIN. (Was permitAll: a real hole.)
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                // Static assets — open so guest pages render fully
                 .requestMatchers("/favicon.ico", "/css/**", "/js/**",
                                  "/images/**", "/static/**").permitAll()
-
-                // GUEST read-only browsing: home, category pages, single post, search.
-                // GET only — POST /create, /delete/*, /post/*/comment fall through to authenticated().
-                // "/post/*" matches /post/123 but NOT /post/123/edit, so the edit form stays gated.
                 .requestMatchers(HttpMethod.GET, "/", "/post/*", "/search").permitAll()
-
-                // Auth / account / public info pages
                 .requestMatchers(
-                     "/error","/register", "/register/age", "/register/rules",
+                    "/error", "/register", "/register/age", "/register/rules",
                     "/join",
                     "/login", "/forgot-password", "/reset-password", "/confirm-email",
                     "/h2-console/**",
                     "/privacy-policy", "/terms-of-service",
                     "/community-guidelines", "/sponsors"
                 ).permitAll()
-
-                // Everything else — incl. /ws/** (chat socket) and /profile/** — needs login.
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/", false)   // false = send guest back to the page they tried to reach
+                .defaultSuccessUrl("/", false)
                 .permitAll()
             )
             .logout(logout -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .logoutSuccessUrl("/login")
                 .permitAll()
             )
-           .csrf(csrf -> csrf
-    .ignoringRequestMatchers("/h2-console/**", "/ws/**")
-)
-
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/h2-console/**", "/ws/**")
+            )
             .headers(headers -> {
                 headers.contentSecurityPolicy(csp -> csp
                     .policyDirectives("default-src 'self'; " +
