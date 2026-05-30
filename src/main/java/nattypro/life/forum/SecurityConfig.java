@@ -71,10 +71,10 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .permitAll()
             )
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/h2-console/**", "/ws/**")
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            )
+           .csrf(csrf -> csrf
+    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+    .ignoringRequestMatchers("/h2-console/**", "/ws/**")
+)
             .headers(headers -> {
                 headers.contentSecurityPolicy(csp -> csp
                     .policyDirectives("default-src 'self'; " +
