@@ -17,7 +17,11 @@ public class YouTubeFeedService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    // Video cache: channelId -> video info
     private final Map<String, Map<String, String>> videoCache = new ConcurrentHashMap<>();
+
+    // Uploads playlist IDs never change — fetch once, keep forever
+    private final Map<String, String> uploadsPlaylistCache = new ConcurrentHashMap<>();
 
     private static final List<String> FEATURED_CHANNELS = Arrays.asList(
         "UCDjSFOeyQ91aJoxTRqjaNWw",  // Longevity Muscle
@@ -33,25 +37,62 @@ public class YouTubeFeedService {
         refreshFeeds();
     }
 
-    @Scheduled(fixedRate = 21600000)
+    @Scheduled(fixedRate = 21600000) // every 6 hours
     public void refreshFeeds() {
         for (String channelId : FEATURED_CHANNELS) {
             try {
                 fetchLatestVideo(channelId);
             } catch (Exception e) {
-                System.err.println("Failed to fetch YouTube feed for channel: " + channelId + " - " + e.getMessage());
+                System.err.println("Failed to fetch feed for channel: " + channelId + " - " + e.getMessage());
             }
         }
     }
 
+    private String fetchUploadsPlaylistId(String channelId) {
+        try {
+            String url = "https://www.googleapis.com/youtube/v3/channels" +
+                "?key=" + apiKey +
+                "&id=" + channelId +
+                "&part=contentDetails";
+
+            @SuppressWarnings("unchecked")
+            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+
+            if (response != null && response.containsKey("items")) {
+                @SuppressWarnings("unchecked")
+                List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+                if (!items.isEmpty()) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> contentDetails = (Map<String, Object>) items.get(0).get("contentDetails");
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> relatedPlaylists = (Map<String, Object>) contentDetails.get("relatedPlaylists");
+                    String uploadsId = (String) relatedPlaylists.get("uploads");
+                    System.out.println("Got uploads playlist for " + channelId + ": " + uploadsId);
+                    return uploadsId;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching uploads playlist for " + channelId + ": " + e.getMessage());
+        }
+        return null;
+    }
+
     private void fetchLatestVideo(String channelId) {
-        String url = "https://www.googleapis.com/youtube/v3/search" +
+        // Step 1: get uploads playlist ID (1 unit, cached permanently)
+        String uploadsPlaylistId = uploadsPlaylistCache.computeIfAbsent(
+            channelId, this::fetchUploadsPlaylistId);
+
+        if (uploadsPlaylistId == null) {
+            System.err.println("Could not get uploads playlist for: " + channelId);
+            return;
+        }
+
+        // Step 2: get latest video from playlist (1 unit — replaces 100-unit search.list)
+        String url = "https://www.googleapis.com/youtube/v3/playlistItems" +
             "?key=" + apiKey +
-            "&channelId=" + channelId +
+            "&playlistId=" + uploadsPlaylistId +
             "&part=snippet" +
-            "&order=date" +
-            "&maxResults=1" +
-            "&type=video";
+            "&maxResults=1";
 
         try {
             @SuppressWarnings("unchecked")
@@ -62,42 +103,37 @@ public class YouTubeFeedService {
                 List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
 
                 if (!items.isEmpty()) {
-                    Map<String, Object> item = items.get(0);
-
                     @SuppressWarnings("unchecked")
-                    Map<String, Object> id = (Map<String, Object>) item.get("id");
-
+                    Map<String, Object> snippet = (Map<String, Object>) items.get(0).get("snippet");
                     @SuppressWarnings("unchecked")
-                    Map<String, Object> snippet = (Map<String, Object>) item.get("snippet");
+                    Map<String, Object> resourceId = (Map<String, Object>) snippet.get("resourceId");
 
-                    String videoId = (String) id.get("videoId");
-
-                    // Guard: skip if videoId is missing (shouldn't happen with type=video, but just in case)
+                    String videoId = (String) resourceId.get("videoId");
                     if (videoId == null || videoId.isBlank()) {
-                        System.err.println("No videoId returned for channel: " + channelId + " — skipping. Full id object: " + id);
+                        System.err.println("No videoId for channel: " + channelId);
                         return;
                     }
 
                     @SuppressWarnings("unchecked")
                     Map<String, Object> thumbnails = (Map<String, Object>) snippet.get("thumbnails");
-
                     @SuppressWarnings("unchecked")
-                    Map<String, Object> highThumbnail = (Map<String, Object>) thumbnails.getOrDefault("maxres", thumbnails.get("high"));
+                    Map<String, Object> thumbnail = (Map<String, Object>) thumbnails.getOrDefault("maxres",
+                        thumbnails.getOrDefault("high", thumbnails.get("medium")));
+
+                    // videoOwnerChannelTitle is the correct field in playlistItems
+                    String channelTitle = (String) snippet.get("videoOwnerChannelTitle");
+                    if (channelTitle == null) channelTitle = (String) snippet.get("channelTitle");
 
                     Map<String, String> videoInfo = new HashMap<>();
                     videoInfo.put("videoId", videoId);
                     videoInfo.put("title", (String) snippet.get("title"));
-                    videoInfo.put("channelTitle", (String) snippet.get("channelTitle"));
-                    videoInfo.put("thumbnail", (String) highThumbnail.get("url"));
+                    videoInfo.put("channelTitle", channelTitle);
+                    videoInfo.put("thumbnail", (String) thumbnail.get("url"));
                     videoInfo.put("channelId", channelId);
 
                     videoCache.put(channelId, videoInfo);
-                    System.out.println("Cached video for " + channelId + ": videoId=" + videoId + " title=" + snippet.get("title"));
-                } else {
-                    System.err.println("No videos returned for channel: " + channelId);
+                    System.out.println("Cached video for " + channelId + ": " + snippet.get("title"));
                 }
-            } else {
-                System.err.println("Unexpected API response for channel " + channelId + ": " + response);
             }
         } catch (Exception e) {
             System.err.println("YouTube API error for channel " + channelId + ": " + e.getMessage());
