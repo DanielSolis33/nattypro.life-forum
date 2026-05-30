@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -73,11 +74,10 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .permitAll()
             )
-            .csrf(csrf -> csrf
-             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .csrfTokenRequestHandler(requestHandler)
-                    .ignoringRequestMatchers("/h2-console/**", "/ws/**")
+           .csrf(csrf -> csrf
+    .ignoringRequestMatchers("/h2-console/**", "/ws/**")
 )
+
             .headers(headers -> {
                 headers.contentSecurityPolicy(csp -> csp
                     .policyDirectives("default-src 'self'; " +

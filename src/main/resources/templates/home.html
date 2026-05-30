@@ -581,9 +581,9 @@
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/pins" class="header-btn">🔐 Pins</a>
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/users" class="header-btn">👥 Users</a>
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/content" class="header-btn">📢 Content</a>
-        <form th:action="@{/logout}" method="post" style="display:inline;">
-            <button type="submit" class="header-btn">Logout</button>
-        </form>
+        
+        //had to change for the GET request in Secconfig with the logout issue, but should be fine since it's just a link now
+     <a href="/logout" class="header-btn">Logout</a>
     </div>
     <div class="header-right" sec:authorize="isAnonymous()">
     <a href="/login" class="header-btn">Log In</a>
