@@ -103,19 +103,29 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
 <script>
+const isMobile = window.innerWidth <= 768;
+
 tinymce.init({
     selector: '#content',
     menubar: false,
-    height: 360,
-    plugins: 'lists link media',
-    toolbar: 'bold italic underline | bullist numlist | link media | removeformat',
+    height: isMobile ? 200 : 360,
+    plugins: isMobile ? 'autosave' : 'lists link media autosave',
+    toolbar: isMobile
+        ? 'bold italic | bullist | restoredraft'
+        : 'bold italic underline | bullist numlist | link media | removeformat | restoredraft',
+    autosave_ask_before_unload: true,
+    autosave_interval: '30s',
+    autosave_restore_when_empty: true,
+    autosave_retention: '60m',
+    autosave_prefix: 'nattypro-edit-{path}{query}-',
     link_default_target: '_blank',
     link_assume_external_targets: true,
     media_live_embeds: true,
-    content_style: "body { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a2e; line-height: 1.6; }"
+    content_style: "body { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a2e; line-height: 1.6; }",
+    setup: function(editor) {
+        editor.on('change', function() { editor.save(); });
+    }
 });
-    
-
 
 document.querySelector('.submit-btn').addEventListener('click', function(e) {
     e.preventDefault();
