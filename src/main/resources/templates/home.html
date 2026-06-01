@@ -148,6 +148,27 @@
         .banner-custom h3 { margin: 12px 0 8px; font-size: 1.4rem; font-weight: 700; }
         .banner-custom a { color: white; text-decoration: underline; font-weight: 600; }
 
+.banner-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 20;
+    touch-action: manipulation;
+}
+.banner-arrow-prev { left: 16px; }
+.banner-arrow-next { right: 16px; }
+
+@media (max-width: 768px) {
+    .banner-arrow { display: none; }
+}
   
 
         /* ── Layout ── */
@@ -560,9 +581,8 @@
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/pins" class="header-btn">🔐 Pins</a>
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/users" class="header-btn">👥 Users</a>
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/content" class="header-btn">📢 Content</a>
-        <form th:action="@{/logout}" method="post" style="display:inline;">
-            <button type="submit" class="header-btn">Logout</button>
-        </form>
+
+     <a href="/logout" class="header-btn">Logout</a>
     </div>
     <div class="header-right" sec:authorize="isAnonymous()">
     <a href="/login" class="header-btn">Log In</a>
@@ -626,16 +646,14 @@
     </div>
 
 	<!-- Previous arrow -->
-	    <button onclick="goToSlide((current - 1 + slides.length) % slides.length)"
-	            style="position:absolute; left:16px; top:50%; transform:translateY(-50%);
-	                   background:rgba(0,0,0,0.5); color:white; border:none; border-radius:50%;
-	                   width:40px; height:40px; font-size:20px; cursor:pointer; z-index:10;">‹</button>
+<button onclick="goToSlide((current - 1 + slides.length) % slides.length)"
+        class="banner-arrow banner-arrow-prev">‹</button>
 
-	    <!-- Next arrow -->
-	    <button onclick="goToSlide((current + 1) % slides.length)"
-	            style="position:absolute; right:16px; top:50%; transform:translateY(-50%);
-	                   background:rgba(0,0,0,0.5); color:white; border:none; border-radius:50%;
-	                   width:40px; height:40px; font-size:20px; cursor:pointer; z-index:10;">›</button>
+<!-- Next arrow -->
+<button onclick="goToSlide((current + 1) % slides.length)"
+        class="banner-arrow banner-arrow-next">›</button>
+
+</div> <!-- closing banner-wrap -->
 
 	</div> <!-- closing banner-wrap -->
 	
@@ -864,8 +882,7 @@
     <div class="modal">
         <button class="modal-close" onclick="document.getElementById('contactModal').classList.remove('show')">✕</button>
         <h3>Contact Us</h3>
-        <form action="/contact/submit" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+   <form th:action="@{/contact/submit}" method="post">
             <input type="text" name="name" placeholder="Your name" required/>
             <input type="text" name="email" placeholder="Your email" required/>
             <select name="subject" required>
@@ -887,6 +904,10 @@
 <script>
 	const slides = document.querySelectorAll('.banner-slide');
 	let current = 0;
+    //Start at whichever banner Thymeleaf marked as active (first banner by default)
+    slides.forEach((slide, index) => {
+        if (slide.classList.contains('active')) current = index;
+    });
 	let bannerTimer;
 
 	function goToSlide(index) {
@@ -906,6 +927,23 @@
 	}
 
 	if (slides.length > 1) bannerTimer = setInterval(nextSlide, 6000);
+
+    // Swipe support for mobile
+const bannerWrap = document.querySelector('.banner-wrap');
+if (bannerWrap) {
+    let touchStartX = 0;
+    bannerWrap.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    bannerWrap.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) {
+            goToSlide(diff > 0
+                ? (current + 1) % slides.length
+                : (current - 1 + slides.length) % slides.length);
+        }
+    }, { passive: true });
+}
 	
 	
 </script>
