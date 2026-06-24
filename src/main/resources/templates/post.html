@@ -521,17 +521,7 @@ window.onload = function() {
     <a href="/join" class="submit-btn" style="text-decoration:none; display:inline-block;">
         Join NattyPro.Life →
     </a>
-</div><!-- Add Comment -->
-        <div class="add-comment">
-            <h3>Add a Comment</h3>
-            <form th:action="@{/post/{id}/comment(id=${post.id})}" th:object="${newComment}" method="post">
-                <textarea th:field="*{content}" placeholder="Write your comment..." required></textarea>
-                <button type="submit" class="submit-btn">Post Comment</button>
-            </form>
-        </div>
-    </div>
 
-</div>
 
 <script>
 function toggleVote(btn) {
