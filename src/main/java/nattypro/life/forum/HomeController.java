@@ -66,7 +66,7 @@
 
 	        int pageSize = 10;
 	        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
-	        Page<Post> postPage;
+	        
 			
 List<Post> posts;
 
