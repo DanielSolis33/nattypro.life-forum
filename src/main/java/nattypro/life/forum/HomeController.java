@@ -67,22 +67,42 @@
 	        int pageSize = 10;
 	        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
 	        Page<Post> postPage;
+			
+List<Post> posts;
 
-	        if (category != null && !category.isEmpty()) {
-	            postPage = postRepository.findByCategory(category, pageable);
-	            model.addAttribute("selectedCategory", category);
-	        } else {
-	            postPage = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-	            model.addAttribute("selectedCategory", "All");
-	        }
+        if (category != null && !category.isEmpty()) {
+            Page<Post> postPage = postRepository.findByCategory(category, pageable);
+            posts = postPage.getContent();
+            model.addAttribute("selectedCategory", category);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", postPage.getTotalPages());
+        } else {
+            // One most-recent post per category for the home view
+            posts = CATEGORIES.stream()
+                .map(cat -> postRepository.findFirstByCategoryOrderByCreatedAtDesc(cat))
+                .filter(java.util.Optional::isPresent)
+                .map(java.util.Optional::get)
+                .collect(Collectors.toList());
+            model.addAttribute("selectedCategory", "All");
+            model.addAttribute("currentPage", 0);
+            model.addAttribute("totalPages", 1);
+        }
 
-	        List<Post> posts = postPage.getContent();
-	        model.addAttribute("currentPage", page);
-	        model.addAttribute("totalPages", postPage.getTotalPages());
-	        model.addAttribute("selectedCategoryParam", category != null ? category : "");
-	
-	    	// Build proStatusMap OUTSIDE if/else
-	    	Map<String, Object> proStatusMap = posts.stream()
+        model.addAttribute("selectedCategoryParam", category != null ? category : "");
+
+        // Build excerptMap — strip HTML tags, truncate to ~33%
+        Map<Long, String> excerptMap = posts.stream().collect(Collectors.toMap(
+            Post::getId,
+            p -> {
+                String text = Jsoup.parse(p.getContent()).text();
+                int limit = Math.max(80, text.length() / 3);
+                return text.length() > limit ? text.substring(0, limit) + "…" : text;
+            }
+        ));
+        model.addAttribute("excerptMap", excerptMap);
+
+        // Build proStatusMap
+        Map<String, Object> proStatusMap = posts.stream()
 	    	    .collect(Collectors.toMap(
 	    	        Post::getAuthor,
 	    	        p -> {

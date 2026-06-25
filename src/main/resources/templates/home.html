@@ -5,7 +5,7 @@
     <title>NattyPro.Life Forum</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
 
@@ -116,14 +116,12 @@
             align-items: center;
             justify-content: center;
             pointer-events: none;
-            
         }
 
-        .banner-slide.active { 
-        	opacity: 1;
-        	pointer-events: auto;
-        	
-         }
+        .banner-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
         .banner-youtube {
             width: 100%;
@@ -148,28 +146,27 @@
         .banner-custom h3 { margin: 12px 0 8px; font-size: 1.4rem; font-weight: 700; }
         .banner-custom a { color: white; text-decoration: underline; font-weight: 600; }
 
-.banner-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    cursor: pointer;
-    z-index: 20;
-    touch-action: manipulation;
-}
-.banner-arrow-prev { left: 16px; }
-.banner-arrow-next { right: 16px; }
+        .banner-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 20;
+            touch-action: manipulation;
+        }
+        .banner-arrow-prev { left: 16px; }
+        .banner-arrow-next { right: 16px; }
 
-@media (max-width: 768px) {
-    .banner-arrow { display: none; }
-}
-  
+        @media (max-width: 768px) {
+            .banner-arrow { display: none; }
+        }
 
         /* ── Layout ── */
         .container {
@@ -341,7 +338,6 @@
             color: var(--text-muted);
             line-height: 1.5;
             margin: 0 0 12px;
-            white-space: pre-wrap;
             word-wrap: break-word;
         }
 
@@ -411,59 +407,40 @@
         }
 
         .footer-grid {
-    max-width: 1160px;
-    margin: 0 auto 40px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 40px;
-}
+            max-width: 1160px;
+            margin: 0 auto 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
 
-.footer-social {
-    display: flex;
-    gap: 16px;
-    margin-top: 8px;
-}
+        .footer-social {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
 
-.footer-social a {
-    color: rgba(255,255,255,0.6);
-    text-decoration: none;
-    font-size: 22px;
-    transition: color 0.2s;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.2);
-}
+        .footer-social a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 22px;
+            transition: color 0.2s;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
 
-.footer-social a:hover { 
-    color: white; 
-    border-color: rgba(255,255,255,0.6);
-}
+        .footer-social a:hover {
+            color: white;
+            border-color: rgba(255,255,255,0.6);
+        }
 
-@media (max-width: 768px) {
-    .footer-grid { 
-        grid-template-columns: 1fr 1fr; 
-        gap: 24px; 
-    }
-    .footer-brand {
-        grid-column: 1 / -1;
-    }
-}
-
-@media (max-width: 480px) {
-    .footer-grid { 
-        grid-template-columns: 1fr;
-    }
-}
         .footer-brand h3 { color: white; font-size: 1.2rem; font-weight: 700; margin: 0 0 10px; }
         .footer-brand p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.6); margin: 0 0 16px; }
-
-        .footer-social { display: flex; gap: 12px; }
-        .footer-social a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 18px; transition: color 0.2s; }
-        .footer-social a:hover { color: white; }
 
         .footer-col h4 { color: white; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 14px; }
         .footer-col a { display: block; color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; margin-bottom: 8px; transition: color 0.2s; cursor: pointer; }
@@ -552,6 +529,7 @@
             .post-card { padding: 14px 16px; }
             .submit-btn { width: 100%; }
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .footer-brand { grid-column: 1 / -1; }
             .banner-wrap { height: 200px; }
         }
 
@@ -581,13 +559,12 @@
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/pins" class="header-btn">🔐 Pins</a>
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/users" class="header-btn">👥 Users</a>
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="/admin/content" class="header-btn">📢 Content</a>
-
-     <a href="/logout" class="header-btn">Logout</a>
+        <a href="/logout" class="header-btn">Logout</a>
     </div>
     <div class="header-right" sec:authorize="isAnonymous()">
-    <a href="/login" class="header-btn">Log In</a>
-    <a href="/join" class="header-btn" style="background:var(--white); color:var(--blue);">Sign Up</a>
-</div>
+        <a href="/login" class="header-btn">Log In</a>
+        <a href="/join" class="header-btn" style="background:var(--white); color:var(--blue);">Sign Up</a>
+    </div>
 </header>
 
 <!-- ── Ticker ── -->
@@ -604,13 +581,11 @@
     <div th:each="banner, iterStat : ${banners}"
          class="banner-slide"
          th:classappend="${iterStat.first and (youtubeVideos == null or #lists.isEmpty(youtubeVideos))} ? ' active' : ''">
-
         <div th:if="${banner.type == 'youtube'}" style="width:100%;height:100%;">
             <iframe class="banner-youtube"
                     th:src="'https://www.youtube.com/embed/' + ${banner.youtubeVideoId} + '?autoplay=0&mute=1'"
                     allowfullscreen></iframe>
         </div>
-
         <div th:if="${banner.type == 'custom'}" class="banner-custom">
             <h3 th:text="${banner.title}">Banner Title</h3>
             <div th:if="${banner.customContent != null}" th:utext="${banner.customContent}"></div>
@@ -627,7 +602,7 @@
                target="_blank"
                style="display:block; width:100%; height:100%; position:relative;">
                 <img th:src="${video.thumbnail}"
-                  style="width:100%; height:100%; object-fit:contain; opacity:0.7; background:#000;"/>
+                     style="width:100%; height:100%; object-fit:contain; opacity:0.7; background:#000;"/>
                 <div style="position:absolute; bottom:0; left:0; right:0;
                             background:linear-gradient(transparent, rgba(0,0,0,0.9));
                             padding:20px 24px;">
@@ -645,63 +620,64 @@
         </div>
     </div>
 
-	<!-- Previous arrow -->
-<button id="banner-prev" class="banner-arrow banner-arrow-prev">‹</button>
+    <button id="banner-prev" class="banner-arrow banner-arrow-prev">‹</button>
+    <button id="banner-next" class="banner-arrow banner-arrow-next">›</button>
 
-<!-- Next arrow -->
-<button id="banner-next" class="banner-arrow banner-arrow-next">›</button>
+    <script>
+        const slides = document.querySelectorAll('.banner-slide');
+        let current = 0;
+        slides.forEach((slide, index) => {
+            if (slide.classList.contains('active')) current = index;
+        });
+        let bannerTimer;
 
-		<script>
-		    const slides = document.querySelectorAll('.banner-slide');
-		    let current = 0;
-		    slides.forEach((slide, index) => {
-		        if (slide.classList.contains('active')) current = index;
-		    });
-		    let bannerTimer;
+        function goToSlide(index) {
+            if (!slides.length) return;
+            slides[current].classList.remove('active');
+            current = index;
+            slides[current].classList.add('active');
+            resetTimer();
+        }
 
-		    function goToSlide(index) {
-		        if (!slides.length) return;
-		        slides[current].classList.remove('active');
-		        current = index;
-		        slides[current].classList.add('active');
-		        resetTimer();
-		    }
+        function nextSlide() {
+            goToSlide((current + 1) % slides.length);
+        }
 
-		    function nextSlide() {
-		        goToSlide((current + 1) % slides.length);
-		    }
+        function resetTimer() {
+            clearInterval(bannerTimer);
+            if (slides.length > 1) bannerTimer = setInterval(nextSlide, 6000);
+        }
 
-		    function resetTimer() {
-		        clearInterval(bannerTimer);
-		        if (slides.length > 1) bannerTimer = setInterval(nextSlide, 6000);
-				document.getElementById('banner-prev')?.addEventListener('click', () => goToSlide((current - 1 + slides.length) % slides.length));
-				document.getElementById('banner-next')?.addEventListener('click', () => goToSlide((current + 1) % slides.length));
-		    }
+        if (slides.length > 1) bannerTimer = setInterval(nextSlide, 6000);
 
-		    if (slides.length > 1) bannerTimer = setInterval(nextSlide, 6000);
+        document.getElementById('banner-prev')?.addEventListener('click', () =>
+            goToSlide((current - 1 + slides.length) % slides.length));
+        document.getElementById('banner-next')?.addEventListener('click', () =>
+            goToSlide((current + 1) % slides.length));
 
-		    const bannerWrap = document.querySelector('.banner-wrap');
-		    if (bannerWrap) {
-		        let touchStartX = 0;
-		        bannerWrap.addEventListener('touchstart', e => {
-		            touchStartX = e.changedTouches[0].screenX;
-		        }, { passive: true });
-		        bannerWrap.addEventListener('touchend', e => {
-		            const diff = touchStartX - e.changedTouches[0].screenX;
-		            if (Math.abs(diff) > 50) {
-		                goToSlide(diff > 0
-		                    ? (current + 1) % slides.length
-		                    : (current - 1 + slides.length) % slides.length);
-		            }
-		        }, { passive: true });
-		    }
-		</script>								
-		
-</div> <!-- closing banner-wrap -->
+        const bannerWrap = document.querySelector('.banner-wrap');
+        if (bannerWrap) {
+            let touchStartX = 0;
+            bannerWrap.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            bannerWrap.addEventListener('touchend', e => {
+                const diff = touchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 50) {
+                    goToSlide(diff > 0
+                        ? (current + 1) % slides.length
+                        : (current - 1 + slides.length) % slides.length);
+                }
+            }, { passive: true });
+        }
+    </script>
 
-	
+</div> <!-- closes banner-wrap -->
+
+<!-- ── Main Layout ── -->
 <div class="container">
 
+    <div class="main-content">
 
         <div th:if="${param.contacted}"
              style="background:#dcfce7;color:#166534;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;">
@@ -721,42 +697,42 @@
             </form>
         </div>
 
-<!-- CREATE FORM - members only, category pages -->
-<div class="create-form" th:if="${selectedCategory != 'All'}" sec:authorize="isAuthenticated()">
-    <h3>Start a Discussion</h3>
-    <form th:action="@{/create}" th:object="${newPost}" method="post" enctype="multipart/form-data">
-        <div class="form-row">
-            <input type="text" th:field="*{title}" placeholder="Post title..." required/>
-            <select th:field="*{category}" required>
-                <option value="">Select category...</option>
-                <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
-            </select>
+        <!-- CREATE FORM - members only, category pages -->
+        <div class="create-form" th:if="${selectedCategory != 'All'}" sec:authorize="isAuthenticated()">
+            <h3>Start a Discussion</h3>
+            <form th:action="@{/create}" th:object="${newPost}" method="post" enctype="multipart/form-data">
+                <div class="form-row">
+                    <input type="text" th:field="*{title}" placeholder="Post title..." required/>
+                    <select th:field="*{category}" required>
+                        <option value="">Select category...</option>
+                        <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
+                    </select>
+                </div>
+                <textarea th:field="*{content}" placeholder="Share your thoughts, questions, or knowledge..." required></textarea>
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size:13px; font-weight:600; color:var(--text-muted);
+                                  display:block; margin-bottom:6px;">
+                        Images (optional) — Max 5 images · JPG, PNG, or GIF only · 5MB per image
+                    </label>
+                    <input type="file" name="images" multiple accept="image/jpeg,image/png,image/gif"
+                           style="font-size:13px; font-family:'DM Sans',sans-serif;"/>
+                </div>
+                <button type="submit" class="submit-btn">Post</button>
+            </form>
         </div>
-        <textarea th:field="*{content}" placeholder="Share your thoughts, questions, or knowledge..." required></textarea>
-        <div style="margin-bottom: 10px;">
-            <label style="font-size:13px; font-weight:600; color:var(--text-muted);
-                          display:block; margin-bottom:6px;">
-                Images (optional) — Max 5 images · JPG, PNG, or GIF only · 5MB per image
-            </label>
-            <input type="file" name="images" multiple accept="image/jpeg,image/png,image/gif"
-                   style="font-size:13px; font-family:'DM Sans',sans-serif;"/>
-        </div>
-        <button type="submit" class="submit-btn">Post</button>
-    </form>
-</div>
 
-<!-- GUEST CTA - in place of the create form -->
-<div class="create-form" th:if="${selectedCategory != 'All'}" sec:authorize="isAnonymous()"
-     style="text-align:center;">
-    <h3>Start a Discussion</h3>
-    <p style="font-size:14px; color:var(--text-muted); line-height:1.6; margin:0 0 16px;">
-        Got something to add to this category? Create a free account to post,
-        reply, and join the conversation.
-    </p>
-    <a href="/join" class="submit-btn" style="text-decoration:none; display:inline-block;">
-        Join NattyPro.Life →
-    </a>
-</div>
+        <!-- GUEST CTA -->
+        <div class="create-form" th:if="${selectedCategory != 'All'}" sec:authorize="isAnonymous()"
+             style="text-align:center;">
+            <h3>Start a Discussion</h3>
+            <p style="font-size:14px; color:var(--text-muted); line-height:1.6; margin:0 0 16px;">
+                Got something to add to this category? Create a free account to post,
+                reply, and join the conversation.
+            </p>
+            <a href="/join" class="submit-btn" style="text-decoration:none; display:inline-block;">
+                Join NattyPro.Life →
+            </a>
+        </div>
 
         <div class="posts-header">
             Recent Posts
@@ -772,7 +748,7 @@
                 <span class="category-badge" th:text="${post.category}">Category</span>
             </div>
             <a th:href="@{/post/{id}(id=${post.id})}" class="post-title-link" th:text="${post.title}">Post Title</a>
-            <p class="post-excerpt" th:utext="${post.content}">Content preview...</p>
+            <p class="post-excerpt" th:text="${excerptMap[post.id]}">Content preview...</p>
             <div class="post-footer">
                 <div class="post-footer-left">
                     <span>By</span>
@@ -796,18 +772,14 @@
             </div>
         </div>
 
-    </div>
-
-<!-- ── Pagination ── -->
+        <!-- ── Pagination ── -->
         <div th:if="${totalPages > 1}"
              style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:24px; flex-wrap:wrap;">
-
             <a th:if="${currentPage > 0}"
                th:href="@{/(category=${selectedCategoryParam}, page=${currentPage - 1})}"
                style="padding:8px 16px; background:var(--white); border:1px solid var(--border);
                       border-radius:8px; text-decoration:none; color:var(--blue); font-weight:600;
                       font-size:14px; box-shadow:var(--shadow);">← Prev</a>
-
             <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
                 <a th:href="@{/(category=${selectedCategoryParam}, page=${i})}"
                    th:text="${i + 1}"
@@ -816,7 +788,6 @@
                        'padding:8px 14px; background:var(--white); color:var(--text); border:1px solid var(--border); border-radius:8px; text-decoration:none; font-size:14px; box-shadow:var(--shadow);'">
                 </a>
             </th:block>
-
             <a th:if="${currentPage < totalPages - 1}"
                th:href="@{/(category=${selectedCategoryParam}, page=${currentPage + 1})}"
                style="padding:8px 16px; background:var(--white); border:1px solid var(--border);
@@ -824,7 +795,7 @@
                       font-size:14px; box-shadow:var(--shadow);">Next →</a>
         </div>
 
-
+    </div> <!-- closes main-content -->
 
     <!-- ── Sidebar ── -->
     <div class="sidebar">
@@ -860,18 +831,18 @@
         </div>
 
         <div style="margin-top: 16px;" sec:authorize="isAuthenticated()">
-    <div class="sidebar-card">
-        <div class="sidebar-title">Chat Rooms</div>
-        <a href="/chat/global" class="category-link">💬 Global Chat</a>
-        <a href="/chat/training" class="category-link">💪 Training Chat</a>
-        <a href="/chat/nutrition" class="category-link">🍎 Nutrition Chat</a>
-        <a href="/chat/recovery" class="category-link">😴 Recovery Chat</a>
-        <a href="/chat/mindset" class="category-link">🧠 Mindset Chat</a>
-    </div>
-</div>
-    </div>
+            <div class="sidebar-card">
+                <div class="sidebar-title">Chat Rooms</div>
+                <a href="/chat/global" class="category-link">💬 Global Chat</a>
+                <a href="/chat/training" class="category-link">💪 Training Chat</a>
+                <a href="/chat/nutrition" class="category-link">🍎 Nutrition Chat</a>
+                <a href="/chat/recovery" class="category-link">😴 Recovery Chat</a>
+                <a href="/chat/mindset" class="category-link">🧠 Mindset Chat</a>
+            </div>
+        </div>
+    </div> <!-- closes sidebar -->
 
-</div>
+</div> <!-- closes container -->
 
 <!-- ── Footer ── -->
 <footer>
@@ -879,16 +850,16 @@
         <div class="footer-brand">
             <h3>NattyPro.Life</h3>
             <p>The community for serious natural bodybuilders. Drug-free, knowledge-driven, competition-ready.</p>
-           <div class="footer-social">
-    <a href="https://www.youtube.com/@dsolcoaching" target="_blank" title="YouTube">
-    <i class="fab fa-youtube"></i>
-</a>
-<a href="https://www.instagram.com/dsolcoaching/" target="_blank" title="Instagram">
-    <i class="fab fa-instagram"></i>
-</a>
-    <a href="#" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-    <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
-</div>
+            <div class="footer-social">
+                <a href="https://www.youtube.com/@dsolcoaching" target="_blank" title="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://www.instagram.com/dsolcoaching/" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+            </div>
         </div>
         <div class="footer-col">
             <h4>Forum</h4>
@@ -902,14 +873,14 @@
             <h4>Community</h4>
             <a href="/chat/global">Live Chat</a>
             <a onclick="document.getElementById('contactModal').classList.add('show'); return false;">Contact Us</a>
-          <a href="/sponsors">Sponsors</a>
+            <a href="/sponsors">Sponsors</a>
             <a onclick="document.getElementById('contactModal').classList.add('show'); return false;">Submit a Banner</a>
-			<a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank">☕ Buy Me a Coffee</a>
+            <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank">☕ Buy Me a Coffee</a>
         </div>
         <div class="footer-col">
             <h4>Legal</h4>
-			<a href="/terms-of-service">Terms of Service</a>
-						<a href="/privacy-policy">Privacy Policy</a>
+            <a href="/terms-of-service">Terms of Service</a>
+            <a href="/privacy-policy">Privacy Policy</a>
             <a href="/community-guidelines">Community Guidelines</a>
         </div>
     </div>
@@ -924,7 +895,7 @@
     <div class="modal">
         <button class="modal-close" onclick="document.getElementById('contactModal').classList.remove('show')">✕</button>
         <h3>Contact Us</h3>
-   <form th:action="@{/contact/submit}" method="post">
+        <form th:action="@{/contact/submit}" method="post">
             <input type="text" name="name" placeholder="Your name" required/>
             <input type="text" name="email" placeholder="Your email" required/>
             <select name="subject" required>
@@ -943,5 +914,32 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+<script>
+const isMobile = window.innerWidth <= 768;
 
+tinymce.init({
+    selector: '#content',
+    menubar: false,
+    height: isMobile ? 200 : 260,
+    plugins: isMobile ? 'autosave' : 'lists link media autosave',
+    toolbar: isMobile
+        ? 'bold italic | bullist | restoredraft'
+        : 'bold italic underline | bullist numlist | link media | removeformat | restoredraft',
+    autosave_ask_before_unload: true,
+    autosave_interval: '30s',
+    autosave_restore_when_empty: true,
+    autosave_retention: '60m',
+    autosave_prefix: 'nattypro-{path}{query}-',
+    link_default_target: '_blank',
+    link_assume_external_targets: true,
+    media_live_embeds: true,
+    content_style: "body { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a2e; line-height: 1.6; }",
+    setup: function(editor) {
+        editor.on('change', function() { editor.save(); });
+    }
+});
+</script>
+
+</body>
 </html>
