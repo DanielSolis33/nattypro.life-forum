@@ -9,6 +9,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     
     List<Post> findByCategory(String category);
     long countByCategory(String category);
+    Optional<Post> findFirstByCategoryOrderByCreatedAtDesc(String category);
 
     // Paginated versions
     Page<Post> findByCategory(String category, Pageable pageable);

@@ -748,7 +748,9 @@
                 <span class="category-badge" th:text="${post.category}">Category</span>
             </div>
             <a th:href="@{/post/{id}(id=${post.id})}" class="post-title-link" th:text="${post.title}">Post Title</a>
+
             <p class="post-excerpt" th:text="${excerptMap[post.id]}">Content preview...</p>
+
             <div class="post-footer">
                 <div class="post-footer-left">
                     <span>By</span>

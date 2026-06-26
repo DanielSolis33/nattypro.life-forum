@@ -53,15 +53,32 @@ public class S3Service {
 
     public void deleteFile(String fileUrl) {
         if (fileUrl == null || fileUrl.isEmpty()) return;
-
-        // Extract key from URL
-        String key = fileUrl.substring(fileUrl.indexOf("posts/"));
-
-        DeleteObjectRequest request = DeleteObjectRequest.builder()
+        // Extract key as everything after the bucket hostname — works for any prefix
+        String marker = "amazonaws.com/";
+        int idx = fileUrl.indexOf(marker);
+        if (idx == -1) return;
+        String key = fileUrl.substring(idx + marker.length());
+        getClient().deleteObject(DeleteObjectRequest.builder()
             .bucket(bucketName)
             .key(key)
-            .build();
-
-        getClient().deleteObject(request);
+            .build());
+    }
+    
+    public String uploadHeroImage(MultipartFile file) throws IOException {
+        String ext = "";
+        String original = file.getOriginalFilename();
+        if (original != null && original.contains(".")) {
+            ext = original.substring(original.lastIndexOf('.'));
+        }
+        String key = "hero/" + UUID.randomUUID() + ext;
+        getClient().putObject(
+            PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .contentType(file.getContentType())
+                .build(),
+            RequestBody.fromBytes(file.getBytes())
+        );
+        return "https://nattypro-images.s3.us-east-2.amazonaws.com/" + key;
     }
 }
