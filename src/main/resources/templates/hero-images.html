@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hero Images — NattyPro Admin</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <style>
+        .admin-wrap  { max-width: 860px; margin: 40px auto; padding: 0 20px; }
+        .admin-card  { background: var(--card-bg, #1a1a1a); border-radius: 12px;
+                       padding: 24px; margin-bottom: 24px; border: 1px solid var(--border, #333); }
+        .admin-card h2 { margin-top: 0; color: var(--gold, #c9a84c);
+                         font-size: 0.85rem; text-transform: uppercase;
+                         letter-spacing: 0.08em; margin-bottom: 16px; }
+        .image-row   { display: flex; align-items: center; gap: 16px; padding: 12px;
+                       background: var(--bg, #111); border-radius: 8px;
+                       border: 1px solid var(--border, #333); margin-bottom: 10px; }
+        .image-row.inactive { opacity: 0.45; }
+        .thumb       { width: 130px; height: 75px; object-fit: cover;
+                       border-radius: 6px; flex-shrink: 0; }
+        .meta        { flex: 1; }
+        .meta .cap   { font-weight: 600; margin-bottom: 4px; }
+        .meta .info  { font-size: 0.8rem; color: var(--text-muted, #888); }
+        .actions     { display: flex; gap: 6px; flex-wrap: wrap; }
+        .btn         { padding: 5px 12px; border-radius: 6px; border: none;
+                       cursor: pointer; font-size: 0.82rem; font-weight: 600; }
+        .btn-gold    { background: var(--gold, #c9a84c); color: #000; }
+        .btn-danger  { background: #dc2626; color: #fff; }
+        .btn-muted   { background: var(--border, #333); color: var(--text, #eee); }
+        .btn-outline { background: transparent; border: 1px solid var(--border, #444);
+                       color: var(--text, #eee); }
+        .upload-form { display: flex; flex-direction: column; gap: 12px; }
+        .upload-form input[type="text"] {
+            padding: 10px 14px; border-radius: 8px;
+            border: 1px solid var(--border, #333);
+            background: var(--bg, #111); color: var(--text, #eee); font-size: 0.95rem; }
+        .pinned-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+                       gap: 10px; margin-top: 12px; }
+        .pin-opt     { border-radius: 8px; overflow: hidden; border: 3px solid transparent;
+                       cursor: pointer; position: relative; }
+        .pin-opt.sel { border-color: var(--gold, #c9a84c); }
+        .pin-opt img { width: 100%; height: 80px; object-fit: cover; display: block; }
+        .pin-opt input { position: absolute; top: 6px; left: 6px; }
+        .alert       { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-weight: 600; }
+        .alert-ok    { background: #065f46; color: #6ee7b7; }
+        .alert-err   { background: #7f1d1d; color: #fca5a5; }
+        .empty       { text-align: center; padding: 40px; color: var(--text-muted, #888); }
+        .cfg-row     { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+<div class="admin-wrap">
+    <h1 style="color:var(--gold,#c9a84c); margin-bottom:24px;">🖼️ Hero Image Carousel</h1>
+
+    <div th:if="${success}" class="alert alert-ok" th:text="${success}"></div>
+    <div th:if="${error}"   class="alert alert-err" th:text="${error}"></div>
+
+    <!-- Settings -->
+    <div class="admin-card">
+        <h2>Display Settings</h2>
+        <form th:action="@{/admin/hero-images/config}" method="post">
+            <div class="cfg-row">
+                <label><input type="radio" name="cycleMode" value="true"
+                              th:checked="${config.cycleMode}"> &nbsp;Cycle all active images</label>
+                <label><input type="radio" name="cycleMode" value="false"
+                              th:checked="${!config.cycleMode}"> &nbsp;Show one pinned image</label>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(images)}">
+                <p style="font-size:0.85rem; color:var(--text-muted,#888); margin-bottom:8px;">
+                    Pinned image (used in single mode):
+                </p>
+                <div class="pinned-grid">
+                    <label th:each="img : ${images}"
+                           class="pin-opt"
+                           th:classappend="${config.pinnedImageId == img.id} ? ' sel' : ''">
+                        <input type="radio" name="pinnedImageId"
+                               th:value="${img.id}"
+                               th:checked="${config.pinnedImageId == img.id}">
+                        <img th:src="${img.s3Url}" th:alt="${img.caption}">
+                    </label>
+                </div>
+            </div>
+
+            <div style="margin-top:16px;">
+                <button type="submit" class="btn btn-gold">Save Settings</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Current Images -->
+    <div class="admin-card">
+        <h2>Current Images</h2>
+        <div th:if="${#lists.isEmpty(images)}" class="empty">No images yet — upload one below.</div>
+        <div th:each="img, s : ${images}"
+             class="image-row"
+             th:classappend="${!img.isActive} ? ' inactive' : ''">
+            <img class="thumb" th:src="${img.s3Url}"
+                 th:alt="${img.caption != null ? img.caption : 'hero'}">
+            <div class="meta">
+                <div class="cap"  th:text="${img.caption != null ? img.caption : '(no caption)'}"></div>
+                <div class="info">
+                    Order: <strong th:text="${img.displayOrder}"></strong> &nbsp;•&nbsp;
+                    <span th:text="${img.isActive ? 'Active' : 'Hidden'}"
+                          th:style="${img.isActive ? 'color:#6ee7b7' : 'color:#f87171'}"></span>
+                </div>
+            </div>
+            <div class="actions">
+                <form th:if="${!s.first}"
+                      th:action="@{/admin/hero-images/move-up/{id}(id=${img.id})}" method="post">
+                    <button class="btn btn-outline">↑</button>
+                </form>
+                <form th:if="${!s.last}"
+                      th:action="@{/admin/hero-images/move-down/{id}(id=${img.id})}" method="post">
+                    <button class="btn btn-outline">↓</button>
+                </form>
+                <form th:action="@{/admin/hero-images/toggle/{id}(id=${img.id})}" method="post">
+                    <button class="btn btn-muted" th:text="${img.isActive ? 'Hide' : 'Show'}"></button>
+                </form>
+                <form th:action="@{/admin/hero-images/delete/{id}(id=${img.id})}" method="post"
+                      onsubmit="return confirm('Delete this image from S3? Cannot be undone.')">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload -->
+    <div class="admin-card">
+        <h2>Upload New Image</h2>
+        <form class="upload-form" th:action="@{/admin/hero-images/upload}"
+              method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <input type="text" name="caption"
+                   placeholder="Caption (optional) — e.g. 2023 WNBF World Champion">
+            <div><button type="submit" class="btn btn-gold">Upload</button></div>
+        </form>
+    </div>
+
+    <a href="/admin" style="color:var(--text-muted,#888); font-size:0.9rem;">← Back to Admin</a>
+</div>
+</body>
+</html>
