@@ -45,6 +45,8 @@
 	    private CommentVoteRepository commentVoteRepo;
 	    @Autowired
 	    private S3Service s3Service;
+		@Autowired
+		private HeroImageService heroImageService;
 	    
 	 // Define all categories in one place
 	    private static final List<String> CATEGORIES = Arrays.asList(
@@ -180,7 +182,7 @@ try {
 	            model.addAttribute("userPostCount", userPostCount);
 	            model.addAttribute("userRank", userRank);
 	            model.addAttribute("rankEmoji", rankEmoji);
-	            
+	            model.addAttribute("heroSlides", heroImageService.getActiveSlides());
 	        }
 	        
 	        return "home";
