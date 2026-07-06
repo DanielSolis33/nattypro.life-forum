@@ -136,6 +136,7 @@ List<Post> posts;
 		// Banner + YouTube — available to guests and members alike
 model.addAttribute("announcements", announcementRepo.findByIsActiveTrueOrderByCreatedAtDesc());
 model.addAttribute("banners", bannerRepo.findByIsActiveTrueOrderByDisplayOrderAsc());
+ model.addAttribute("heroSlides", heroImageService.getActiveSlides());
 try {
     if (youtubeFeedService.hasCachedVideos()) {
         model.addAttribute("youtubeVideos", youtubeFeedService.getLatestVideos());
@@ -182,7 +183,7 @@ try {
 	            model.addAttribute("userPostCount", userPostCount);
 	            model.addAttribute("userRank", userRank);
 	            model.addAttribute("rankEmoji", rankEmoji);
-	            model.addAttribute("heroSlides", heroImageService.getActiveSlides());
+	           
 	        }
 	        
 	        return "home";
