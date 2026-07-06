@@ -658,10 +658,36 @@
             <span th:each="slide, iterStat : ${heroSlides}"
                   class="hero-dot"
                   th:classappend="${iterStat.first} ? ' active' : ''"
-                  th:onclick="'heroGoTo(' + ${iterStat.index} + ')'"></span>
+                  th:onclick="
+                  'heroGoTo(' + ${iterStat.index} + ')'"></span>
         </div>
     </div>
 </div>
+<script>
+// Hero Carousel
+(function () {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots   = document.querySelectorAll('.hero-dot');
+    if (slides.length <= 1) return;
+
+    let current = 0;
+    let timer = setInterval(() => heroNav(1), 5000);
+
+    window.heroNav = function (dir) {
+        heroGoTo((current + dir + slides.length) % slides.length);
+    };
+
+    window.heroGoTo = function (idx) {
+        slides[current].classList.remove('active');
+        dots[current]?.classList.remove('active');
+        current = idx;
+        slides[current].classList.add('active');
+        dots[current]?.classList.add('active');
+        clearInterval(timer);
+        timer = setInterval(() => heroNav(1), 5000);
+    };
+})();
+</script>
 
 <!-- ── Hero Banner ── -->
 <div class="banner-wrap" th:if="${(banners != null and !#lists.isEmpty(banners)) or (youtubeVideos != null and !#lists.isEmpty(youtubeVideos))}">
@@ -1009,8 +1035,9 @@
 <script>
 const isMobile = window.innerWidth <= 768;
 
-tinymce.init({
-    selector: '#content',
+if (typeof tinymce !== 'undefined' && document.getElementById('content')) {
+    tinymce.init({
+        selector: '#content',
     menubar: false,
     height: isMobile ? 200 : 260,
     plugins: isMobile ? 'autosave' : 'lists link media autosave',
@@ -1030,30 +1057,6 @@ tinymce.init({
         editor.on('change', function() { editor.save(); });
     }
 });
-
-// Hero Carousel
-(function () {
-    const slides = document.querySelectorAll('.hero-slide');
-    const dots   = document.querySelectorAll('.hero-dot');
-    if (slides.length <= 1) return;
-
-    let current = 0;
-    let timer = setInterval(() => heroNav(1), 5000);
-
-    window.heroNav = function (dir) {
-        heroGoTo((current + dir + slides.length) % slides.length);
-    };
-
-    window.heroGoTo = function (idx) {
-        slides[current].classList.remove('active');
-        dots[current]?.classList.remove('active');
-        current = idx;
-        slides[current].classList.add('active');
-        dots[current]?.classList.add('active');
-        clearInterval(timer);
-        timer = setInterval(() => heroNav(1), 5000);
-    };
-})();
 
 </script>
 
