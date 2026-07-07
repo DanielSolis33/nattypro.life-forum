@@ -12,15 +12,19 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
+import javax.imageio.ImageIO;
 
 @Service
 public class S3Service {
 
-    private static final String IMAGE_BASE_URL = "https://images.nattypro.life"; //single source of truth for the new domain 
+   private static final String IMAGE_BASE_URL = "https://images.nattypro.life"; //single source of truth for the new domain
+    private static final long MAX_IMAGE_SIZE_BYTES = 10L * 1024 * 1024; // 10MB
+
     @Value("${aws.access.key}")
     private String accessKey;
 
@@ -33,7 +37,7 @@ public class S3Service {
     @Value("${aws.region}")
     private String region;
 
-    private S3Client getClient() {
+ private S3Client getClient() {
         return S3Client.builder()
             .region(Region.of(region))
             .credentialsProvider(StaticCredentialsProvider.create(
@@ -42,7 +46,23 @@ public class S3Service {
             .build();
     }
 
-  public String uploadFile(MultipartFile file) throws IOException {
+    // Enforces a size cap, then attempts a real image decode (not just a declared
+    // Content-Type header) to confirm the bytes are actually a valid image before
+    // anything reaches S3. Returns the bytes so callers don't have to read twice.
+    private byte[] validateAndReadImage(MultipartFile file) throws IOException {
+        if (file.getSize() > MAX_IMAGE_SIZE_BYTES) {
+            throw new IllegalArgumentException("File exceeds the maximum allowed size of 10MB.");
+        }
+        byte[] bytes = file.getBytes();
+        if (ImageIO.read(new ByteArrayInputStream(bytes)) == null) {
+            throw new IllegalArgumentException("File is not a valid image.");
+        }
+        return bytes;
+    }
+
+public String uploadFile(MultipartFile file) throws IOException {
+        byte[] imageBytes = validateAndReadImage(file);
+
         String originalFilename = file.getOriginalFilename();
         String safeFilename = originalFilename != null
             ? originalFilename.replaceAll("[^a-zA-Z0-9.\\-]", "_")
@@ -55,7 +75,7 @@ public class S3Service {
             .contentType(file.getContentType())
             .build();
 
-        getClient().putObject(request, RequestBody.fromBytes(file.getBytes()));
+        getClient().putObject(request, RequestBody.fromBytes(imageBytes));
 
      return IMAGE_BASE_URL + "/" + key;  //swaps old hardcoded s3 hostname for the new constant and cleaned up stray closing brace
     }
@@ -78,20 +98,22 @@ public void deleteFile(String fileUrl) {
             .build());
     }
     
-    public String uploadHeroImage(MultipartFile file) throws IOException {
-        String ext = "";
+ public String uploadHeroImage(MultipartFile file) throws IOException {
+        byte[] imageBytes = validateAndReadImage(file);
+
+      String ext = "";
         String original = file.getOriginalFilename();
         if (original != null && original.contains(".")) {
-            ext = original.substring(original.lastIndexOf('.'));
+            ext = original.substring(original.lastIndexOf('.')).replaceAll("[^a-zA-Z0-9.\\-]", "_");
         }
         String key = "hero/" + UUID.randomUUID() + ext;
-        getClient().putObject(
+       getClient().putObject(
             PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .contentType(file.getContentType())
                 .build(),
-            RequestBody.fromBytes(file.getBytes())
+            RequestBody.fromBytes(imageBytes)
         );
         return IMAGE_BASE_URL + "/" + key;
     }
