@@ -42,8 +42,12 @@ public class S3Service {
             .build();
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
-        String key = "posts/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+  public String uploadFile(MultipartFile file) throws IOException {
+        String originalFilename = file.getOriginalFilename();
+        String safeFilename = originalFilename != null
+            ? originalFilename.replaceAll("[^a-zA-Z0-9.\\-]", "_")
+            : "file";
+        String key = "posts/" + UUID.randomUUID() + "_" + safeFilename;
 
         PutObjectRequest request = PutObjectRequest.builder()
             .bucket(bucketName)
