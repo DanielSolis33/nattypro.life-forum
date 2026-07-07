@@ -11,12 +11,16 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.core.sync.RequestBody;
 
+
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 @Service
 public class S3Service {
 
+    private static final String IMAGE_BASE_URL = "https://images.nattypro.life"; //single source of truth for the new domain 
     @Value("${aws.access.key}")
     private String accessKey;
 
@@ -49,15 +53,21 @@ public class S3Service {
 
         getClient().putObject(request, RequestBody.fromBytes(file.getBytes()));
 
-        return "https://nattypro-images.s3.us-east-2.amazonaws.com/" + key;  }
-
-    public void deleteFile(String fileUrl) {
+     return IMAGE_BASE_URL + "/" + key;  //swaps old hardcoded s3 hostname for the new constant and cleaned up stray closing brace
+    }
+// instead of searching for a literal sting this pareses the URL properly and pull out just its path, the strips the leasing slash to get to s3 key
+public void deleteFile(String fileUrl) {
         if (fileUrl == null || fileUrl.isEmpty()) return;
-        // Extract key as everything after the bucket hostname — works for any prefix
-        String marker = "amazonaws.com/";
-        int idx = fileUrl.indexOf(marker);
-        if (idx == -1) return;
-        String key = fileUrl.substring(idx + marker.length());
+        String key;
+        try {
+            key = new URI(fileUrl).getPath();
+        } catch (URISyntaxException e) {
+            return;
+        }
+        if (key == null || key.isEmpty()) return;
+        if (key.startsWith("/")) {
+            key = key.substring(1);
+        }
         getClient().deleteObject(DeleteObjectRequest.builder()
             .bucket(bucketName)
             .key(key)
@@ -79,6 +89,6 @@ public class S3Service {
                 .build(),
             RequestBody.fromBytes(file.getBytes())
         );
-        return "https://nattypro-images.s3.us-east-2.amazonaws.com/" + key;
+        return IMAGE_BASE_URL + "/" + key;
     }
 }
