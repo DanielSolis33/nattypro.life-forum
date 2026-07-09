@@ -61,10 +61,11 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .permitAll()
             )
-            .csrf(csrf -> csrf
+          .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/h2-console/**", "/ws/**")
             )
-            headers.contentSecurityPolicy(csp -> csp
+            .headers(headers -> {
+                headers.contentSecurityPolicy(csp -> csp
                     .policyDirectives("default-src 'self'; " +
                         "script-src 'self' 'unsafe-inline' static.cloudflareinsights.com cdn.jsdelivr.net cdnjs.cloudflare.com blob: https://challenges.cloudflare.com; " +
                         "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com cdn.jsdelivr.net; " +
