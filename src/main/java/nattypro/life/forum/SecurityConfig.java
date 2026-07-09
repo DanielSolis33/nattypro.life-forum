@@ -64,14 +64,13 @@ public class SecurityConfig {
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/h2-console/**", "/ws/**")
             )
-            .headers(headers -> {
-                headers.contentSecurityPolicy(csp -> csp
+            headers.contentSecurityPolicy(csp -> csp
                     .policyDirectives("default-src 'self'; " +
-                        "script-src 'self' 'unsafe-inline' static.cloudflareinsights.com cdn.jsdelivr.net cdnjs.cloudflare.com blob:; " +
+                        "script-src 'self' 'unsafe-inline' static.cloudflareinsights.com cdn.jsdelivr.net cdnjs.cloudflare.com blob: https://challenges.cloudflare.com; " +
                         "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com cdn.jsdelivr.net; " +
                         "font-src fonts.gstatic.com cdnjs.cloudflare.com cdn.jsdelivr.net; " +
                         "img-src 'self' i.ytimg.com data: blob: nattypro-images.s3.us-east-2.amazonaws.com cdn.jsdelivr.net; " +
-                        "frame-src https://www.youtube.com; " +
+                        "frame-src https://www.youtube.com https://challenges.cloudflare.com; " +
                         "connect-src 'self' https://www.youtube.com")
                 );
                 headers.frameOptions(frame -> frame.sameOrigin());
