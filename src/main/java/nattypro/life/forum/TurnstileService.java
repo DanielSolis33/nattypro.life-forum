@@ -25,8 +25,9 @@ public class TurnstileService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public boolean verifyToken(String token) {
+public boolean verifyToken(String token) {
         if (token == null || token.isBlank()) {
+            System.out.println("Turnstile: no token received from client (null or blank)");
             return false;
         }
 
@@ -41,9 +42,12 @@ public class TurnstileService {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Turnstile siteverify response: " + response.body());
             JsonNode json = objectMapper.readTree(response.body());
 
-            return json.path("success").asBoolean(false);
+            boolean success = json.path("success").asBoolean(false);
+            System.out.println("Turnstile verification result: " + success);
+            return success;
         } catch (Exception e) {
             System.err.println("Turnstile verification failed: " + e.getMessage());
             return false;
