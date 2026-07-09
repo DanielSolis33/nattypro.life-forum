@@ -19,7 +19,7 @@ public class AuthController {
     private UserService userService;
     @Autowired private UserRepository userRepository;
     @Autowired private EmailService emailService;
-    
+    @Autowired private TurnstileService turnstileService;
     
     @GetMapping("/register")
     public String showRegisterForm() {
@@ -31,9 +31,16 @@ public class AuthController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String email,
+                           @RequestParam(name = "cf-turnstile-response", required = false) String turnstileToken,
                            HttpSession session,
                            Model model) {
-        // Check if username/email already exists before going further
+        // Verify Turnstile token before touching the database
+       if (!turnstileService.verifyToken(turnstileToken)) {
+           model.addAttribute("error", "CAPTCHA verification failed. Please refresh and try again.");
+           return "register";
+      }
+        
+                            // Check if username/email already exists before going further
         try {
             userService.validateNewUser(username, email);
         } catch (Exception e) {
