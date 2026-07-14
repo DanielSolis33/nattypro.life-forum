@@ -211,8 +211,8 @@
                     </form>
                     <form th:action="@{/admin/announcements/delete/{id}(id=${a.id})}" method="post" style="display:inline;">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <button type="submit" class="btn btn-sm btn-danger"
-                                onclick="return confirm('Delete this announcement?');">Delete</button>
+                       <button type="submit" class="btn btn-sm btn-danger confirm-delete"
+                                data-confirm-message="Delete this announcement?">Delete</button>
                     </form>
                 </div>
             </div>
@@ -228,7 +228,7 @@
             <form action="/admin/banners/add" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="form-row">
-                    <select name="type" class="type-select" onchange="toggleBannerFields(this.value)">
+                    <select name="type" id="bannerTypeSelect" class="type-select">
                         <option value="youtube">YouTube</option>
                         <option value="custom">Custom</option>
                     </select>
@@ -274,8 +274,8 @@
                 <div class="item-actions">
                     <form th:action="@{/admin/banners/delete/{id}(id=${b.id})}" method="post" style="display:inline;">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <button type="submit" class="btn btn-sm btn-danger"
-                                onclick="return confirm('Delete this banner?');">Delete</button>
+                      <button type="submit" class="btn btn-sm btn-danger confirm-delete"
+                                data-confirm-message="Delete this banner?">Delete</button>
                     </form>
                 </div>
             </div>
@@ -315,12 +315,23 @@
 
 </div>
 
-<script>
+<script th:nonce="${cspNonce}">
 function toggleBannerFields(type) {
     document.getElementById('youtubeFields').className = 'youtube-fields' + (type === 'youtube' ? ' show' : '');
     document.getElementById('customFields').className = 'custom-fields' + (type === 'custom' ? ' show' : '');
 }
-</script>
 
+document.getElementById('bannerTypeSelect').addEventListener('change', function () {
+    toggleBannerFields(this.value);
+});
+
+document.querySelectorAll('.confirm-delete').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+        if (!confirm(btn.dataset.confirmMessage)) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 </body>
 </html>

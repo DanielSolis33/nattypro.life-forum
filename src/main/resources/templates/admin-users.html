@@ -166,8 +166,8 @@
 <div class="container">
     <div class="page-header">
         <h2>👥 User Management</h2>
-        <input type="text" class="search-box" id="searchBox"
-               placeholder="Search username..." onkeyup="filterUsers()"/>
+      <input type="text" class="search-box" id="searchBox"
+               placeholder="Search username..."/>
     </div>
 
     <div class="card">
@@ -212,11 +212,11 @@
                 </form>
             </div>
             <div>
-                <form th:action="@{/admin/users/delete/{username}(username=${user.username})}"
-                      method="post"
-                      onsubmit="return confirm('Anonymize ' + '[[${user.username}]]' + '? This cannot be undone.');">
+              <form th:action="@{/admin/users/delete/{username}(username=${user.username})}"
+                      method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit" class="toggle-btn btn-revoke"
+                    <button type="submit" class="toggle-btn btn-revoke confirm-delete"
+                            th:attr="data-confirm-message='Anonymize ' + ${user.username} + '? This cannot be undone.'"
                             th:disabled="${user.role == 'ADMIN'}">
                         Delete
                     </button>
@@ -226,7 +226,7 @@
     </div>
 </div>
 
-<script>
+<script th:nonce="${cspNonce}">
 function filterUsers() {
     const query = document.getElementById('searchBox').value.toLowerCase();
     document.querySelectorAll('.user-row').forEach(row => {
@@ -234,4 +234,14 @@ function filterUsers() {
         row.style.display = username.includes(query) ? '' : 'none';
     });
 }
+
+document.getElementById('searchBox').addEventListener('keyup', filterUsers);
+
+document.querySelectorAll('.confirm-delete').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+        if (!confirm(btn.dataset.confirmMessage)) {
+            e.preventDefault();
+        }
+    });
+});
 </script>
