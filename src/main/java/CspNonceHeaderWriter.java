@@ -23,7 +23,7 @@ public class CspNonceHeaderWriter implements HeaderWriter {
             "script-src 'self' 'nonce-" + nonce + "' static.cloudflareinsights.com cdn.jsdelivr.net cdnjs.cloudflare.com blob: https://challenges.cloudflare.com; " +
             "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdnjs.cloudflare.com cdn.jsdelivr.net; " +
             "font-src fonts.gstatic.com cdnjs.cloudflare.com cdn.jsdelivr.net; " +
-            "img-src 'self' i.ytimg.com data: blob: images.nattypro.life cdn.jsdelivr.net; " +
+           "img-src 'self' i.ytimg.com data: blob: images.nattypro.life nattypro-images.s3.us-east-2.amazonaws.com cdn.jsdelivr.net; " +
             "frame-src https://www.youtube.com https://challenges.cloudflare.com; " +
             "connect-src 'self' https://www.youtube.com";
 
