@@ -27,6 +27,10 @@ public class CspNonceHeaderWriter implements HeaderWriter {
             "frame-src https://www.youtube.com https://challenges.cloudflare.com; " +
             "connect-src 'self' https://www.youtube.com";
 
-        response.setHeader("Content-Security-Policy", csp);
+       response.setHeader("Content-Security-Policy", csp);
+        response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+        response.setHeader("Permissions-Policy",
+            "geolocation=(), microphone=(), camera=(), payment=(), usb=(), " +
+            "magnetometer=(), gyroscope=(), accelerometer=(), interest-cohort=()");
     }
 }
