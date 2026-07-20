@@ -331,7 +331,7 @@
                    placeholder="Type a message..."
                    maxlength="500"
                    autocomplete="off"/>
-            <button class="send-btn" onclick="sendMessage()">Send</button>
+            <button class="send-btn" id="sendMessageBtn">Send</button>
         </div>
     </div>
 
@@ -341,9 +341,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
-<script th:inline="javascript">
-    const room = [[$,{room}]];
-    const username = [[$,{username}]];
+<script th:inline="javascript" th:nonce="${cspNonce}">
+    const room = [[${room}]];
+    const username = [[${username}]];
     let stompClient = null;
 
     function connect() {
@@ -411,6 +411,8 @@
             sendMessage();
         }
     });
+
+    document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
 
     connect();
 </script>

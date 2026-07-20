@@ -25,7 +25,7 @@
 <div style="position: relative;">
     <input type="password" id="password" name="password" placeholder="Password" required
            style="width:100%; padding-right: 44px;"/>
-    <button type="button" onclick="togglePassword()"
+  <button type="button" id="togglePasswordBtn"
             style='position:absolute; right:0; top:0; height:100%; width:44px;
                    background:none; border:none; cursor:pointer; color:#6b7280; font-size:16px;'>
         👁
@@ -38,11 +38,12 @@
             Already have an account? <a href="/login">Login here</a>
         </div>
     </div>
-    <script>
+    <script th:nonce="${cspNonce}">
 function togglePassword() {
     const pwd = document.getElementById('password');
     pwd.type = pwd.type === 'password' ? 'text' : 'password';
 }
+document.getElementById('togglePasswordBtn').addEventListener('click', togglePassword);
 </script>
     
 </body>

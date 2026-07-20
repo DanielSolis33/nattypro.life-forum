@@ -102,7 +102,7 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
-<script>
+<script th:nonce="${cspNonce}">
 const isMobile = window.innerWidth <= 768;
 
 tinymce.init({

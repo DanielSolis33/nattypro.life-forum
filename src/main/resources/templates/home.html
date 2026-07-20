@@ -652,18 +652,16 @@
     </div>
 
     <div th:if="${#lists.size(heroSlides) > 1}">
-        <button class="hero-arrow hero-prev" onclick="heroNav(-1)">&#8249;</button>
-        <button class="hero-arrow hero-next" onclick="heroNav(1)">&#8250;</button>
+     <button class="hero-arrow hero-prev">&#8249;</button>
+        <button class="hero-arrow hero-next">&#8250;</button>
         <div class="hero-dots">
             <span th:each="slide, iterStat : ${heroSlides}"
                   class="hero-dot"
-                  th:classappend="${iterStat.first} ? ' active' : ''"
-                  th:onclick="
-                  'heroGoTo(' + ${iterStat.index} + ')'"></span>
+                  th:classappend="${iterStat.first} ? ' active' : ''"></span>
         </div>
     </div>
 </div>
-<script>
+<script th:nonce="${cspNonce}">
 // Hero Carousel
 (function () {
     const slides = document.querySelectorAll('.hero-slide');
@@ -684,8 +682,12 @@
         slides[current].classList.add('active');
         dots[current]?.classList.add('active');
         clearInterval(timer);
-        timer = setInterval(() => heroNav(1), 5000);
+       timer = setInterval(() => heroNav(1), 5000);
     };
+
+    document.querySelector('.hero-prev')?.addEventListener('click', () => heroNav(-1));
+    document.querySelector('.hero-next')?.addEventListener('click', () => heroNav(1));
+    dots.forEach((dot, index) => dot.addEventListener('click', () => heroGoTo(index)));
 })();
 </script>
 
@@ -738,7 +740,7 @@
     <button id="banner-prev" class="banner-arrow banner-arrow-prev">‹</button>
     <button id="banner-next" class="banner-arrow banner-arrow-next">›</button>
 
-    <script>
+   <script th:nonce="${cspNonce}">
         const slides = document.querySelectorAll('.banner-slide');
         let current = 0;
         slides.forEach((slide, index) => {
@@ -881,8 +883,8 @@
                     <span sec:authorize="isAuthenticated()">
                         <form th:if="${#authentication.name == post.author} or ${#authorization.expression('hasRole(''ADMIN'')')}"
                               th:action="@{/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
-                            <button type="submit" class="delete-btn"
-                                    onclick="return confirm('Delete this post?');">Delete</button>
+                           <button type="submit" class="delete-btn confirm-delete"
+                                    data-confirm-message="Delete this post?">Delete</button>
                         </form>
                     </span>
                 </div>
@@ -989,9 +991,9 @@
         <div class="footer-col">
             <h4>Community</h4>
             <a href="/chat/global">Live Chat</a>
-            <a onclick="document.getElementById('contactModal').classList.add('show'); return false;">Contact Us</a>
+            <a class="open-contact-modal">Contact Us</a>
             <a href="/sponsors">Sponsors</a>
-            <a onclick="document.getElementById('contactModal').classList.add('show'); return false;">Submit a Banner</a>
+            <a class="open-contact-modal">Submit a Banner</a>
             <a href="https://buymeacoffee.com/YOUR_USERNAME" target="_blank">☕ Buy Me a Coffee</a>
         </div>
         <div class="footer-col">
@@ -1008,9 +1010,9 @@
 </footer>
 
 <!-- ── Contact Modal ── -->
-<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)this.classList.remove('show')">
+<div class="modal-overlay" id="contactModal">
     <div class="modal">
-        <button class="modal-close" onclick="document.getElementById('contactModal').classList.remove('show')">✕</button>
+        <button class="modal-close" id="contactModalClose">✕</button>
         <h3>Contact Us</h3>
         <form th:action="@{/contact/submit}" method="post">
             <input type="text" name="name" placeholder="Your name" required/>
@@ -1032,7 +1034,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
-<script>
+<script th:nonce="${cspNonce}">
 const isMobile = window.innerWidth <= 768;
 
 if (typeof tinymce !== 'undefined' && document.getElementById('content')) {
@@ -1058,6 +1060,29 @@ if (typeof tinymce !== 'undefined' && document.getElementById('content')) {
     }
 });
 }
+
+document.querySelectorAll('.confirm-delete').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+        if (!confirm(btn.dataset.confirmMessage)) {
+            e.preventDefault();
+        }
+    });
+});
+
+document.querySelectorAll('.open-contact-modal').forEach(function (link) {
+    link.addEventListener('click', function () {
+        document.getElementById('contactModal').classList.add('show');
+    });
+});
+
+const contactModal = document.getElementById('contactModal');
+contactModal?.addEventListener('click', function (e) {
+    if (e.target === contactModal) contactModal.classList.remove('show');
+});
+
+document.getElementById('contactModalClose')?.addEventListener('click', function () {
+    contactModal?.classList.remove('show');
+});
 </script>
 
 </body>
