@@ -91,7 +91,12 @@
     <version>1.17.2</version>
 </dependency>
 
-	</dependencies>
+	<dependency>
+        <groupId>com.bucket4j</groupId>
+        <artifactId>bucket4j_jdk17-core</artifactId>
+        <version>8.19.0</version>
+    </dependency>
+</dependencies>
 
 	<build>
 		<plugins>
