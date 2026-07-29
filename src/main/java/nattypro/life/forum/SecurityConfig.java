@@ -34,11 +34,12 @@ public class SecurityConfig {
         return authProvider;
     }
 
-   @Bean
+@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, RateLimitService rateLimitService) throws Exception {
         http
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(new LoginRateLimitFilter(rateLimitService), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new CspNonceFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/favicon.ico", "/css/**", "/js/**",
@@ -68,8 +69,7 @@ public class SecurityConfig {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .ignoringRequestMatchers("/h2-console/**", "/ws/**")
             )
-          .headers(headers -> {
-                headers.addHeaderWriter(new CspNonceHeaderWriter());
+       .headers(headers -> {
                 headers.frameOptions(frame -> frame.sameOrigin());
             });
         return http.build();
