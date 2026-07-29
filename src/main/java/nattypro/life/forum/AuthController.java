@@ -34,11 +34,28 @@ public class AuthController {
                            @RequestParam(name = "cf-turnstile-response", required = false) String turnstileToken,
                            HttpSession session,
                            Model model) {
-        // Verify Turnstile token before touching the database
+       // Verify Turnstile token before touching the database
        if (!turnstileService.verifyToken(turnstileToken)) {
            model.addAttribute("error", "CAPTCHA verification failed. Please refresh and try again.");
            return "register";
       }
+
+        // Reject invalid usernames immediately — matches the @Pattern constraint
+        // on User.java, so this check can't drift out of sync with the persist-time one
+        // Reject invalid usernames immediately — matches the @Pattern constraint
+        // on User.java, so this check can't drift out of sync with the persist-time one
+        if (!username.matches("^[a-zA-Z0-9_]+$")) {
+            model.addAttribute("error", "Sorry, no spaces or special characters in your username — letters, numbers, and underscores only. Make sure to pick a name you want as your display name too, thanks!");
+            return "register";
+        }
+
+        // Reject bad-length usernames immediately — matches the @Size constraint on User.java
+        if (username.length() < 3 || username.length() > 20) {
+            model.addAttribute("error", "Username must be 3-20 characters.");
+            return "register";
+        }
+        
+                            // Check if username/email already exists before going further
         
                             // Check if username/email already exists before going further
         try {
