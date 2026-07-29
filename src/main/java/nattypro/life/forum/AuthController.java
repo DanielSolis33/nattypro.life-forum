@@ -3,6 +3,7 @@ package nattypro.life.forum;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,10 @@ public class AuthController {
     @Autowired private UserRepository userRepository;
     @Autowired private EmailService emailService;
     @Autowired private TurnstileService turnstileService;
-    
+
+    @Value("${sponsors.enabled:true}")
+    private boolean sponsorsEnabled;
+
     @GetMapping("/register")
     public String showRegisterForm() {
         return "register";
@@ -159,8 +163,11 @@ public class AuthController {
     public String communityGuidelines() {
         return "community-guidelines";
     }
-    @GetMapping("/sponsors")
+   @GetMapping("/sponsors")
     public String sponsors() {
+        if (!sponsorsEnabled) {
+            return "redirect:/";
+        }
         return "sponsors";
     }
 }
