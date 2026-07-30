@@ -14,6 +14,7 @@
 	import org.springframework.web.bind.annotation.PathVariable;
 	import org.springframework.web.bind.annotation.PostMapping;
 	import org.springframework.web.bind.annotation.RequestParam;
+	import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 	import org.springframework.data.domain.Page;
 	import org.springframework.data.domain.PageRequest;
 	import org.springframework.data.domain.Sort;
@@ -418,13 +419,18 @@ try {
 	        return "search-results";
 	    }
 	
-	    @PostMapping("/post/{id}/comment")
-	    public String addComment(@PathVariable Long id, @RequestParam String content, Authentication authentication) {
+	 @PostMapping("/post/{id}/comment")
+	    public String addComment(@PathVariable Long id, @RequestParam String content, Authentication authentication,
+	                              RedirectAttributes redirectAttributes) {
+	        if (content != null && content.length() > 5000) {
+	            redirectAttributes.addFlashAttribute("commentError", "Comment is too long (max 5,000 characters).");
+	            return "redirect:/post/" + id;
+	        }
 	        Comment comment = new Comment();
 	        comment.setContent(content);
 	        comment.setPostId(id);
 	        comment.setAuthor(authentication.getName());
-	        comment.setCreatedAt(LocalDateTime.now());  // ← Add this line
+	        comment.setCreatedAt(LocalDateTime.now());
 	        commentRepository.save(comment);
 	        return "redirect:/post/" + id;
 	    }

@@ -505,11 +505,28 @@ window.onload = function() {
         <!-- Add Comment - members only -->
 <div class="add-comment" sec:authorize="isAuthenticated()">
     <h3>Add a Comment</h3>
+    <p th:if="${commentError}" th:text="${commentError}"
+       style="color:#dc2626; font-size:13px; font-weight:600; margin:0 0 10px;"></p>
     <form th:action="@{/post/{id}/comment(id=${post.id})}" th:object="${newComment}" method="post">
-        <textarea th:field="*{content}" placeholder="Write your comment..." required></textarea>
+        <textarea th:field="*{content}" id="commentContent" maxlength="5000"
+                  placeholder="Write your comment..." required></textarea>
+        <div id="commentCounter" style="text-align:right; font-size:12px; color:var(--text-muted); margin:-4px 0 10px;">0 / 5000</div>
         <button type="submit" class="submit-btn">Post Comment</button>
     </form>
 </div>
+
+<script th:nonce="${cspNonce}">
+(function() {
+    var textarea = document.getElementById('commentContent');
+    var counter = document.getElementById('commentCounter');
+    if (!textarea || !counter) return;
+    function updateCounter() {
+        counter.textContent = textarea.value.length + ' / 5000';
+    }
+    textarea.addEventListener('input', updateCounter);
+    updateCounter();
+})();
+</script>
 
 <!-- Guest CTA -->
 <div class="add-comment" sec:authorize="isAnonymous()" style="text-align:center;">

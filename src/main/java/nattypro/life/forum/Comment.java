@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Comment {
@@ -15,7 +12,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+   @Column(length = 5000)
     private String content;
+    
     private String author;
     
     @Column(name = "created_at")
