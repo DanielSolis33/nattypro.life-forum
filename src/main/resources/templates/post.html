@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<script>
+<script th:nonce="${cspNonce}">
 function escapeHtml(s) {
     return s.replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -409,20 +409,18 @@ window.onload = function() {
 
                 <!-- Vote button (logged in, not own post) -->
                 <div th:if="${currentUser != null and currentUser != post.author}">
-                    <button class="upvote-btn"
+                <button class="upvote-btn" id="postVoteBtn"
                             th:classappend="${hasVoted} ? 'voted' : ''"
-                            th:data-post-id="${post.id}"
-                            onclick="toggleVote(this)">
+                            th:data-post-id="${post.id}">
                         👍 <span class="vote-count" th:text="${post.voteCount}">0</span>
                     </button>
                 </div>
 				
 				<!-- Follow button (logged in only) -->
 				<div th:if="${currentUser != null}">
-				    <button class="follow-btn"
+				<button class="follow-btn" id="followBtn"
 				            th:classappend="${isFollowing} ? 'following' : ''"
-				            th:data-post-id="${post.id}"
-				            onclick="toggleFollow(this)">
+				            th:data-post-id="${post.id}">
 				        <span th:text="${isFollowing} ? '🔔 Following' : '🔕 Follow Thread'">Follow</span>
 				    </button>
 				</div>
@@ -487,10 +485,9 @@ window.onload = function() {
                 <!-- Comment upvote -->
                 <span th:if="${currentUser != null and currentUser.username != comment.author}"
                       style="margin-left:auto;">
-                    <button class="upvote-btn"
+                    <button class="upvote-btn comment-vote-btn"
                             th:classappend="${commentVotedMap != null and commentVotedMap[comment.id]} ? 'voted' : ''"
                             th:data-comment-id="${comment.id}"
-                            onclick="toggleCommentVote(this)"
                             style="padding:4px 10px; font-size:13px;">
                         👍 <span class="vote-count" th:text="${comment.voteCount}">0</span>
                     </button>
@@ -499,6 +496,14 @@ window.onload = function() {
                       style="margin-left:auto; font-size:13px; color:var(--text-muted);">
                     👍 <span th:text="${comment.voteCount}">0</span>
                 </span>
+                <form th:if="${currentUser != null and (currentUser.username == comment.author or #authorization.expression('hasRole(''ADMIN'')'))}"
+                      th:action="@{/comment/{id}/delete(id=${comment.id})}" method="post"
+                      class="comment-delete-form" style="display:inline; margin-left:8px;">
+                    <button type="submit"
+                            style="background:none; border:none; color:#dc2626; font-size:12px; cursor:pointer; padding:4px 8px;">
+                        🗑 Delete
+                    </button>
+                </form>
             </div>
             <p class="comment-content" th:text="${comment.content}">Comment content</p>
         </div>
@@ -540,7 +545,7 @@ window.onload = function() {
     </a>
 
 
-<script>
+<script th:nonce="${cspNonce}">
 function toggleVote(btn) {
     const postId = btn.dataset.postId;
     fetch(`/vote/post/${postId}`, {
@@ -590,6 +595,26 @@ function toggleFollow(btn) {
     });
 
 }
+
+// Wire up buttons that used to carry inline onclick — CSP no longer allows those.
+document.getElementById('postVoteBtn')?.addEventListener('click', function() {
+    toggleVote(this);
+});
+document.getElementById('followBtn')?.addEventListener('click', function() {
+    toggleFollow(this);
+});
+document.querySelectorAll('.comment-vote-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        toggleCommentVote(this);
+    });
+});
+document.querySelectorAll('.comment-delete-form').forEach(function(form) {
+    form.addEventListener('submit', function(e) {
+        if (!confirm('Delete this comment?')) {
+            e.preventDefault();
+        }
+    });
+});
 </script>
 </body>
 </html>

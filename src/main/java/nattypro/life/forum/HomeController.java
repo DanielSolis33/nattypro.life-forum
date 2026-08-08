@@ -431,7 +431,24 @@ try {
 	        comment.setPostId(id);
 	        comment.setAuthor(authentication.getName());
 	        comment.setCreatedAt(LocalDateTime.now());
-	        commentRepository.save(comment);
-	        return "redirect:/post/" + id;
-	    }
+	       commentRepository.save(comment);
+        return "redirect:/post/" + id;
+    }
+
+    @PostMapping("/comment/{id}/delete")
+    public String deleteComment(@PathVariable Long id, Authentication authentication) {
+        Comment comment = commentRepository.findById(id).orElse(null);
+        if (comment == null) {
+            return "redirect:/";
+        }
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (comment.getAuthor().equals(authentication.getName()) || isAdmin) {
+            commentRepository.delete(comment);
+        }
+
+        return "redirect:/post/" + comment.getPostId();
+    }
 }
