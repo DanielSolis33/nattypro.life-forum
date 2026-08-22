@@ -1041,6 +1041,8 @@ if (typeof tinymce !== 'undefined' && document.getElementById('content')) {
     tinymce.init({
         selector: '#content',
     menubar: false,
+    browser_spellcheck: true,
+    contextmenu: false,
     height: isMobile ? 200 : 260,
     plugins: isMobile ? 'autosave' : 'lists link media autosave',
     toolbar: isMobile
