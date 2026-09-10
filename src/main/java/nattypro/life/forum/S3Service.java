@@ -107,11 +107,12 @@ public void deleteFile(String fileUrl) {
             ext = original.substring(original.lastIndexOf('.')).replaceAll("[^a-zA-Z0-9.\\-]", "_");
         }
         String key = "hero/" + UUID.randomUUID() + ext;
-       getClient().putObject(
+             getClient().putObject(
             PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .contentType(file.getContentType())
+                .cacheControl("public, max-age=31536000, immutable")
                 .build(),
             RequestBody.fromBytes(imageBytes)
         );
