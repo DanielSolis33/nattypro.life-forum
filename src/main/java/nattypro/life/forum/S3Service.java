@@ -69,10 +69,11 @@ public String uploadFile(MultipartFile file) throws IOException {
             : "file";
         String key = "posts/" + UUID.randomUUID() + "_" + safeFilename;
 
-        PutObjectRequest request = PutObjectRequest.builder()
+               PutObjectRequest request = PutObjectRequest.builder()
             .bucket(bucketName)
             .key(key)
             .contentType(file.getContentType())
+            .cacheControl("public, max-age=31536000, immutable")
             .build();
 
         getClient().putObject(request, RequestBody.fromBytes(imageBytes));
