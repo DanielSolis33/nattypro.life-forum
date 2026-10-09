@@ -4,9 +4,9 @@ on:
   push:
     branches: [ main ]
 
-  jobs:
+jobs:
   deploy:
-        runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,7 +29,7 @@ on:
           tags: tag:ci
           args: --ssh=false
 
-       - name: Check Tailscale path to server
+      - name: Check Tailscale path to server
         run: |
           sudo tailscale status
           sudo tailscale ping -c 3 ${{ secrets.SSH_HOST }} || true
@@ -46,6 +46,7 @@ on:
             sleep 5
           done
           test -s ~/.ssh/known_hosts
+
       - name: Copy JAR to server
         run: |
           scp -i ~/.ssh/id_ed25519 \
