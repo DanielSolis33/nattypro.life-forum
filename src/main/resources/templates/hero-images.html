@@ -137,8 +137,9 @@
     <!-- Upload -->
     <div class="admin-card">
         <h2>Upload New Image</h2>
-        <form class="upload-form" th:action="@{/admin/hero-images/upload}"
-              method="post" enctype="multipart/form-data">
+               <form class="upload-form" th:action="@{/admin/hero-images/upload}"
+              method="post" enctype="multipart/form-data"
+              data-upload-guard data-max-files="1" data-max-file-mb="10" data-max-total-mb="10">
             <input type="file" name="file" accept="image/*" required>
             <input type="text" name="caption"
                    placeholder="Caption (optional) — e.g. 2023 WNBF World Champion">
@@ -148,5 +149,6 @@
 
     <a href="/admin/users" style="color:var(--text-muted,#888); font-size:0.9rem;">← Back to Admin</a>
 </div>
+<script th:src="@{/js/upload-guard.js}" th:nonce="${cspNonce}"></script>
 </body>
 </html>

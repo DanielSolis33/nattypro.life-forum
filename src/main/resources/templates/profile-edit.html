@@ -225,8 +225,8 @@
             <h2>Edit Your Profile</h2>
 
             <!-- MAIN FORM -->
-            <form th:action="@{/profile/update}" method="post" enctype="multipart/form-data">
-
+            <form th:action="@{/profile/update}" method="post" enctype="multipart/form-data"
+                  data-upload-guard data-max-files="1" data-max-file-mb="5" data-max-total-mb="5">
                 <!-- Avatar Upload -->
                 <div class="form-group">
                     <label for="avatarFile">Profile Picture</label>
@@ -375,5 +375,6 @@
             </div>
         
     </div>
+<script th:src="@{/js/upload-guard.js}" th:nonce="${cspNonce}"></script>
 </body>
 </html>
