@@ -386,8 +386,8 @@
 
             div.innerHTML = `
                 <div class="message-meta">
-                    <span class="message-sender">${data.sender}</span>
-                    <span class="message-time">${data.time}</span>
+                    <span class="message-sender">${escapeHtml(data.sender)}</span>
+                    <span class="message-time">${escapeHtml(data.time)}</span>
                 </div>
                 <div class="message-bubble">${escapeHtml(data.content)}</div>
             `;

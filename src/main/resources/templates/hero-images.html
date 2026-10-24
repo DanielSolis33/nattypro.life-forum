@@ -127,7 +127,7 @@
                     <button class="btn btn-muted" th:text="${img.isActive ? 'Hide' : 'Show'}"></button>
                 </form>
                 <form th:action="@{/admin/hero-images/delete/{id}(id=${img.id})}" method="post"
-                      onsubmit="return confirm('Delete this image from S3? Cannot be undone.')">
+                      data-confirm="Delete this image from S3? Cannot be undone.">
                     <button class="btn btn-danger">Delete</button>
                 </form>
             </div>
@@ -150,5 +150,6 @@
     <a href="/admin/users" style="color:var(--text-muted,#888); font-size:0.9rem;">← Back to Admin</a>
 </div>
 <script th:src="@{/js/upload-guard.js}" th:nonce="${cspNonce}"></script>
+<script th:src="@{/js/confirm-actions.js}" th:nonce="${cspNonce}"></script>
 </body>
 </html>

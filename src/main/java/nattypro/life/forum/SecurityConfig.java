@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -35,7 +36,10 @@ public class SecurityConfig {
     }
 
 @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, RateLimitService rateLimitService) throws Exception {
+        public SecurityFilterChain securityFilterChain(HttpSecurity http, RateLimitService rateLimitService) throws Exception {
+        CsrfTokenRequestAttributeHandler csrfHandler = new CsrfTokenRequestAttributeHandler();
+        csrfHandler.setCsrfRequestAttributeName(null);
+
         http
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(new LoginRateLimitFilter(rateLimitService), UsernamePasswordAuthenticationFilter.class)
@@ -49,7 +53,6 @@ public class SecurityConfig {
                     "/error", "/register", "/register/age", "/register/rules",
                     "/join",
                     "/login", "/forgot-password", "/reset-password", "/confirm-email",
-                    "/h2-console/**",
                     "/privacy-policy", "/terms-of-service",
                     "/community-guidelines", "/sponsors"
                 ).permitAll()
@@ -65,9 +68,10 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .permitAll()
             )
-          .csrf(csrf -> csrf
+                   .csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/h2-console/**", "/ws/**")
+                .csrfTokenRequestHandler(csrfHandler)
+                .ignoringRequestMatchers("/ws/**")
             )
        .headers(headers -> {
                 headers.frameOptions(frame -> frame.sameOrigin());
